@@ -1,0 +1,20 @@
+.app_name {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.header {
+    background-color: white;
+    border-bottom: 1.5px solid #ececec;
+    height: 60px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding-left: 55px;
+    padding-right: 55px;
+
+    position: sticky;
+    top: 0;
+}

@@ -1,0 +1,73 @@
+.page {
+    background-color: white;
+    width: 100%;
+    min-height: calc(100vh - 60px);
+    padding: 30px;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+
+    margin-bottom: 20px;
+}
+
+.top .current_page {
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.add_btn {
+    font-size: 14px;
+    font-family: "Readex Pro";
+    background-color: var(--blueprimary);
+    color: white;
+    border: none;
+
+    transition: 0.3s ease-in-out;
+}
+
+.tooltip {
+    visibility: hidden;
+    position: absolute;
+    right: 0;
+    top: -24px;
+
+    font-size: 11px;
+    background-color: #ececec;
+    padding: 5px;
+    border-radius: 5px 5px 0 5px;
+}
+
+.add_btn:hover + .tooltip {
+    visibility: visible;
+}
+
+.add_btn:hover {
+    background-color: #0075e3;
+}
+
+table.table {
+    font-size: 14px;
+}
+
+.table tr:first-child {
+    background-color: #f2f5ff;
+
+}
+
+.table td, .table th {
+    padding: 14px 20px;
+    border-bottom: 1px solid #eaeaea;
+    text-align: left;
+}
+
+.table th {
+    font-weight: 500;
+}
+
+.table td {
+    font-weight: 300;
+}

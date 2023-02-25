@@ -1,0 +1,36 @@
+.sidebar_box {
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    min-width: 290px;
+    box-sizing: border-box;
+    padding: 20px 20px 20px 16px;
+    margin-top: 16px;
+    border-radius: 10px;
+    margin-left: 20px;
+    height: fit-content;
+
+    position: sticky;
+    top: 76px;
+}
+
+.sidebar_box a {
+    text-decoration: none;
+    color: black;
+    padding: 5px 12px;
+    margin-bottom: 7px;
+    line-height: 24px;
+    border-radius: 7px;
+
+    transition: 0.1s ease-in;
+}
+
+.sidebar_box a:hover:not(.active) {
+    color: #002fff;
+    background-color: aliceblue;
+}
+
+.sidebar_box .active {
+    background-color: var(--blueprimary);
+    color: white;
+}
