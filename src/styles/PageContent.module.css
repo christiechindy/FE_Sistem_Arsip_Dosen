@@ -46,22 +46,38 @@
 }
 
 .add_btn:hover {
-    background-color: #0075e3;
+    box-shadow: 2px 2px 0px #000000;
 }
 
 table.table {
     font-size: 14px;
+    width: 100%;
 }
 
-.table tr:first-child {
+.table thead tr {
     background-color: #f2f5ff;
+}
 
+.table th:first-child{
+    border-radius: 10px 0 0 0;
+}
+
+.table th:last-child{
+    border-radius: 0 10px 0 0;
 }
 
 .table td, .table th {
-    padding: 14px 20px;
-    border-bottom: 1px solid #eaeaea;
+    padding: 12px 11px;
     text-align: left;
+    line-height: 20px;
+}
+
+.table th:first-child, .table td:first-child {
+    padding-left: 20px;
+}
+
+.table th:last-child, .table td:last-child {
+    padding-right: 20px;
 }
 
 .table th {
@@ -70,4 +86,33 @@ table.table {
 
 .table td {
     font-weight: 300;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.table tr {
+    transition: 0.2s ease-in-out;
+}
+
+.table tr:hover {
+    background-color: #F8FAFF;
+}
+
+.iconlink {
+    fill: #c3c3c3;
+    height: 17px;
+    display: block;
+
+    position: relative;
+    bottom: -2px;
+
+    transition: 0.2s ease-in-out;
+}
+
+.iconlink svg {
+    height: 100%;
+}
+
+.iconlink:hover {
+    fill: var(--blueprimary);
+    cursor: pointer;
 }
