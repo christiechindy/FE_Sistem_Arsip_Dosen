@@ -66,11 +66,83 @@ body {
     gap: 27px;
 }
 
-button {
+button, .add_btn {
     padding: 8px 16px;
     border-radius: 5px;
+    font-family: "Readex Pro";
+    text-decoration: none;
 }
 
-button:hover {
+button:hover, .add_btn:hover {
     cursor: pointer;
+}
+
+.add_btn {
+    font-size: 14px;
+    font-family: "Readex Pro";
+    background-color: var(--blueprimary);
+    color: white;
+    border: none;
+
+    transition: 0.3s ease-in-out;
+}
+
+.add_btn:hover + .tooltip {
+    visibility: visible;
+}
+
+.add_btn:hover {
+    background-color: #001CB0;
+}
+
+input {
+    padding: 8px 16px;
+}
+
+/*------------LOADING-----------*/
+.loader,
+.loader:before,
+.loader:after {
+    border-radius: 50%;
+    width: 1em;
+    height: 1em;
+    animation-fill-mode: both;
+    animation: bblFadInOut 1.8s infinite ease-in-out;
+}
+
+.loader {
+    text-align: center;
+    color: navy;
+    font-size: 7px;
+    text-indent: -9999em;
+    transform: translateZ(0);
+    animation-delay: -0.16s;
+}
+
+.loader:before,
+.loader:after {
+    content: '';
+    position: absolute;
+    top: 0;
+}
+
+.loader:before {
+    left: -3em;
+    animation-delay: -0.32s;
+}
+
+.loader:after {
+    left: 3em;
+}
+
+@keyframes bblFadInOut {
+    0%,
+    80%,
+    100% {
+        box-shadow: 0 2.5em 0 -1.3em
+    }
+
+    40% {
+        box-shadow: 0 2.5em 0 0
+    }
 }

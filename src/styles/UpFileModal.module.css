@@ -1,0 +1,40 @@
+.bg {
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 2;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal_box {
+    background-color: rgba(255, 255, 255, 1);
+    padding: 40px;
+    z-index: 3;
+    height: 250px;
+    width: 440px;
+    border-radius: 15px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.modal_box .content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.modal_box label {
+    font-weight: 500;
+    font-size: 1rem;
+}

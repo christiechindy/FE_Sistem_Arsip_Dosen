@@ -1,0 +1,146 @@
+.page {
+    background-color: white;
+    width: 100%;
+    min-height: calc(100vh - 60px);
+    padding: 30px;
+}
+
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+
+    margin-bottom: 20px;
+}
+
+.top .current_page {
+    font-weight: 600;
+    font-size: 20px;
+}
+
+.sister {
+    font-size: 14px;
+    font-family: "Readex Pro";
+    background-color: var(--blueprimary);
+    color: white;
+    border: none;
+
+    transition: 0.3s ease-in-out;
+}
+
+.tooltip {
+    visibility: hidden;
+    position: absolute;
+    right: 0;
+    top: -24px;
+
+    font-size: 11px;
+    background-color: #ececec;
+    padding: 5px;
+    border-radius: 5px 5px 0 5px;
+}
+
+.sister:hover + .tooltip {
+    visibility: visible;
+}
+
+.sister:hover {
+    background-color: #001CB0;
+}
+
+.contents {
+    width: 75%;
+}
+
+.contents .field label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.contents .field input {
+    border: 1.5px solid #dadada;
+    border-radius: 10px;
+    font-family: "Readex Pro";
+    width: 100%;
+}
+
+.contents .field input:focus {
+    outline: none;
+    border: 1.5px solid var(--blueprimary);
+}
+
+.contents .field {
+    margin-bottom: 20px;
+}
+
+.box_riwayat {
+    background-color: #f7fcff;
+    border: 1.5px solid #dadada;
+    border-radius: 10px;
+    padding: 20px 22px;
+}
+
+.field:has(>.field) {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+
+.box_riwayat .field .field {
+    flex: 1;
+    margin-bottom: 0;
+}
+
+.box_riwayat select {
+    background-color: #fff;
+    width: 90px;
+    border: 1.5px solid #dadada;
+    border-radius: 10px;
+    font-family: "Readex Pro";
+    padding: 8px 12px;
+}
+
+.box_riwayat select:focus {
+    outline: none;
+    border: 1.5px solid var(--blueprimary);
+}
+
+.box_riwayat .field:last-child {
+    margin-bottom: 0;
+}
+
+/* .box_riwayat input::-webkit-file-upload-button {
+    background-color: palegoldenrod;
+} */
+
+.field input[type="file"] {
+    background: white;
+    padding: 0;
+}
+
+.field input[type="file"]::-webkit-file-upload-button {
+    background-color: #d9d9d9;
+    border: none;
+    height: 100%;
+    font-family: "Readex Pro";
+    padding: 8px 16px;
+    margin-right: 14px;
+}
+
+.field .add_input {
+    width: 100%;
+    margin-top: 10px;
+    border: 1px solid #dadada;
+    background-color: #d6f0ff;
+    color: #0075FF;
+    font-size: 14px;
+    border-radius: 10px;
+
+    transition: 0.2s ease-in-out;
+}
+
+.field .add_input:hover {
+    background-color: #c0e7fd;
+}

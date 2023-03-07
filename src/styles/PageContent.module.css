@@ -19,16 +19,6 @@
     font-size: 20px;
 }
 
-.add_btn {
-    font-size: 14px;
-    font-family: "Readex Pro";
-    background-color: var(--blueprimary);
-    color: white;
-    border: none;
-
-    transition: 0.3s ease-in-out;
-}
-
 .tooltip {
     visibility: hidden;
     position: absolute;
@@ -39,14 +29,6 @@
     background-color: #ececec;
     padding: 5px;
     border-radius: 5px 5px 0 5px;
-}
-
-.add_btn:hover + .tooltip {
-    visibility: visible;
-}
-
-.add_btn:hover {
-    box-shadow: 2px 2px 0px #000000;
 }
 
 table.table {
@@ -93,8 +75,16 @@ table.table {
     transition: 0.2s ease-in-out;
 }
 
+/* .table tbody tr:nth-child(2n) {
+    background-color: #eaeaea;
+} */
+
 .table tr:hover {
     background-color: #F8FAFF;
+}
+
+.table tbody tr td:first-child {
+    width: 20px;
 }
 
 .iconlink {
@@ -115,4 +105,83 @@ table.table {
 .iconlink:hover {
     fill: var(--blueprimary);
     cursor: pointer;
+}
+
+div.iconlink:hover {
+    fill: #ff0000;
+}
+
+/*----------------LOADING-----------------*/
+.loadingContainer {
+    position: relative;
+    width: fit-content;
+    top: 50px;
+    left: 50%;
+    text-align: center;
+}
+
+/*----------------------FORM---------------------*/
+.contents {
+    margin-top: 30px;
+    width: 75%;
+}
+
+.contents .field label {
+    font-size: 14px;
+    display: block;
+    margin-bottom: 10px;
+}
+
+.contents .field input {
+    border: 1.5px solid #dadada;
+    border-radius: 10px;
+    font-family: "Readex Pro";
+    width: 100%;
+}
+
+.contents .field input:focus {
+    outline: none;
+    border: 1.5px solid var(--blueprimary);
+}
+
+.contents .field {
+    margin-bottom: 20px;
+}
+
+.contents .action_btn {
+    display: flex;
+    gap: 12px;
+    justify-content: flex-end;
+}
+
+.contents .action_btn button {
+    font-size: 14px;
+    font-family: "Readex Pro";
+    border: none;
+
+    transition: 0.3s ease-in-out;
+}
+
+.contents .action_btn .save {
+    background-color: var(--blueprimary);
+    color: white;
+}
+
+.contents .action_btn .cancel {
+    color: var(--blueprimary);
+    background-color: white;
+    border: 2px solid var(--blueprimary);
+}
+
+.action_btn button:hover {
+    cursor: pointer;
+}
+
+.action_btn .save:hover {
+    background-color: #001CB0;
+}
+
+.action_btn .cancel:hover {
+    border: 2px solid red;
+    color: red;
 }

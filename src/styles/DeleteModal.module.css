@@ -68,17 +68,20 @@
     transition: 0.3s ease-in-out;
 }
 
-.action_btn button:last-child {
+.action_btn .delete_btn {
     background-color: #ff0000;
 }
 
-.action_btn button:first-child {
+.action_btn .cancel_btn {
     border: 2px solid #ff0000;
     background-color: white;
     color: #ff0000;
 }
 
-.action_btn button:hover {
-    /* color: black; */
-    box-shadow: 2px 2px 0px #000000;
+.delete_btn:hover {
+    background-color: #CE0000;
+}
+
+.cancel_btn:hover {
+    background-color: #FFDDDD;
 }

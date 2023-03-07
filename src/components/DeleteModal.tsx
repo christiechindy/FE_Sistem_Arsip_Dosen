@@ -4,17 +4,18 @@ import WarningIcon from "@/assets/WarningIcon";
 import React, { useState, useEffect } from 'react';
 
 interface IProps {
-    showModal: boolean;
-    setShowModal: React.Dispatch<React.SetStateAction<boolean>>
+    showDelModal: boolean;
+    setShowDelModal: React.Dispatch<React.SetStateAction<boolean>>;
+    setSure_to_del: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const Modal = ({showModal, setShowModal}: IProps) => {
+const Modal = ({showDelModal, setShowDelModal, setSure_to_del}: IProps) => {
     const [bgClicked, setBgClicked] = useState<boolean>(false);
     const [boxClicked, setBoxClicked] = useState<boolean>(false);
 
     const handleBackgroundClick = () => {
         setBgClicked(true);
-        setShowModal(false);
+        setShowDelModal(false);
     }
 
     const handleBoxClick = (e: React.MouseEvent<HTMLDivElement>): void => {
@@ -37,8 +38,8 @@ const Modal = ({showModal, setShowModal}: IProps) => {
                     </div>
                 </div>
                 <div className={styles.action_btn}>
-                    <button onClick={handleBackgroundClick}>Cancel</button>
-                    <button>Delete</button>
+                    <button className={styles.cancel_btn} onClick={handleBackgroundClick}>Cancel</button>
+                    <button className={styles.delete_btn} onClick={() => setSure_to_del(true)}>Delete</button>
                 </div>
             </div>
         </div>

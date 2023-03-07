@@ -10,7 +10,7 @@ interface ILink {
 
 const menu:ILink[] = [
     {
-        href: "/",
+        href: "/home",
         text: "Home"
     },
     {
@@ -50,7 +50,7 @@ export const Sidebar = () => {
         <>
             <div className={styles.sidebar_box}>
                 {menu.map((link: ILink, index: number) => (
-                    <Link href={link.href} className={router.pathname === link.href ? styles.active : ""} key={index}>{link.text}</Link>
+                    <Link href={link.href} className={router.pathname.startsWith(link.href) ? styles.active : ""} key={index}>{link.text}</Link>
                 ))}
             </div>
         </>
