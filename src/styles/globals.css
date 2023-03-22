@@ -91,12 +91,25 @@ button:hover, .add_btn:hover {
     visibility: visible;
 }
 
+.tooltip {
+    visibility: hidden;
+    position: absolute;
+    right: 0;
+    top: -24px;
+
+    font-size: 11px;
+    background-color: #ececec;
+    padding: 5px;
+    border-radius: 5px 5px 0 5px;
+}
+
 .add_btn:hover {
     background-color: #001CB0;
 }
 
 input {
     padding: 8px 16px;
+    font-size: 14px;
 }
 
 /*------------LOADING-----------*/
@@ -145,4 +158,16 @@ input {
     40% {
         box-shadow: 0 2.5em 0 0
     }
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
 }

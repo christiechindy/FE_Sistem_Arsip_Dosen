@@ -1,24 +1,22 @@
 "use client";
 
-import Layout from "@/components/Layout"
-import styles from "../../styles/PageContent.module.css"
-import { useRouter } from 'next/router';
+import Layout from '@/components/Layout';
+import styles from "../../styles/PageContent.module.css";
+import React, {useState} from 'react'
 import { ChangeEvent, MouseEvent } from "react";
-import {useState} from 'react';
+import { useRouter } from 'next/router';
 
-const AddData = () => {
+const EditData = () => {
     const router = useRouter();
+    const props = router.query;
+    console.log(props);
 
-    const [nip, setNip] = useState<string>("");
-    const [startY, setStartY] = useState<string>("");
-    const [endY, setEndY] = useState<string>("");
-    const [semester, setSemester] = useState<string>("");
-    const [filee, setFile] = useState<File | null>(null);
-
-    const cancelHandler = (e: MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        router.push("/bkd");
-    }
+    const id = props.id;
+    const [nip, setNip] = useState<any>(props.dosen_nip);
+    const [startY, setStartY] = useState<any>(props.start_year);
+    const [endY, setEndY] = useState<any>(props.end_year);
+    const [semester, setSemester] = useState<any>(props.semester);
+    // const [filee, setFilee] = useState<File | string>(props.file_bkd);
 
     const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
         if (e.target.name === "nip") {
@@ -36,31 +34,45 @@ const AddData = () => {
         }
     }
 
-    const submitHandler = async () => {
+    const cancelHandler = (e: MouseEvent<HTMLButtonElement>) => {
+        e.preventDefault();
+        router.push("/bkd");
+    }
+
+    const updateHandler = async () => {
         try {
             const formData = new FormData();
             formData.append("dosen_nip", nip);
             formData.append("start_year", startY);
             formData.append("end_year", endY);
             formData.append("semester", semester);
-            formData.append("file_bkd", filee as any);
 
-            await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/bkd/addBkd`, {
+            await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/bkd/updateBkdById/${id}`, {
                 method: "POST",
                 body: formData
             }).then((res) => res.json())
-        } catch (err) {
+        } catch(err) {
             console.log(err);
         } finally {
-            router.push("/bkd");
+            router.back();
         }
+    }
+
+    const fileOpenHandler = async () => {
+        await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/bkd/getFileBkdById/${id}`, {
+            method: "GET"
+        }).then((res) => res.blob())
+          .then((blob) => {
+            const url = window.URL.createObjectURL(blob);
+            window.open(url);
+          })
     }
 
     return (
         <Layout>
             <div className={styles.page}>
                 <div className={styles.top}>
-                    <div className={styles.current_page}>Tambah BKD</div>
+                    <div className={styles.current_page}>Edit BKD</div>
                 </div>
                 <div className={styles.contents}>
                     <div className={styles.field}>
@@ -68,7 +80,7 @@ const AddData = () => {
                         <input type="text" id="nip" value={nip} name="nip" onChange={changeHandler} />
                     </div>
                     <div className={styles.field}>
-                        <label>Tahun Ajaran</label>
+                        <label htmlFor="tahun">Tahun Ajaran</label>
                         <input type="number" id={styles["startY"]} value={startY} name="startY" onChange={changeHandler} />{" - "}
                         <input type="number" id={styles["endY"]} value={endY} name="endY" onChange={changeHandler} onFocus={() => setEndY((Number(startY)+1).toString())} />
                     </div>
@@ -78,14 +90,15 @@ const AddData = () => {
                     </div>
                     <div className={styles.field}>
                         <label htmlFor="file">File</label>
-                        <input type="file" id="file" onChange={e => {
+                        <input type="text" className={styles.namafile} value={props.file_bkd} onClick={fileOpenHandler} />
+                        {/* <input type="file" id="file" onChange={e => {
                             if (!e.target.files) return;
-                            setFile(e.target.files[0])
-                        }} />
+                            setFilee(e.target.files[0])
+                        }} /> */}
                     </div>
                     <div className={styles.action_btn}>
                         <button className={styles.cancel} onClick={cancelHandler}>Cancel</button>
-                        <button className={styles.save} onClick={submitHandler}>Save</button>
+                        <button className={styles.save} onClick={updateHandler}>Save</button>
                     </div>
                 </div>
             </div>
@@ -93,4 +106,4 @@ const AddData = () => {
     )
 }
 
-export default AddData
+export default EditData

@@ -22,7 +22,7 @@ const menu:ILink[] = [
         text: "Data Pengabdian"
     },
     {
-        href: "/sertif-profesi-dan-serdos",
+        href: "/sertifikasi",
         text: "Sertifikat Profesi dan Serdos"
     },
     {

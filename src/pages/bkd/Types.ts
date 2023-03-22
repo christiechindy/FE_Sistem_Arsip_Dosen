@@ -1,7 +1,8 @@
 export type TDataBKD = {
     id: string;
     dosen_nip: string;
-    tahun_ajaran: number;
+    start_year: number;
+    end_year: number;
     semester: number | string;
     file_bkd: string;
 }
@@ -12,11 +13,4 @@ export type TResponse = {
     message: string;
     count: number;
     data: TDataBKD[]
-}
-
-export type TNewBKD = {
-    dosen_nip: string;
-    tahun_ajaran: string;
-    semester: string;
-    file_bkd: string;
 }

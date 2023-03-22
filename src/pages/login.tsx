@@ -3,6 +3,10 @@ import styles from "../styles/Login.module.css";
 import Link from 'next/link';
 
 const index = () => {
+    const loginHandler = () => {
+        window.open("https://mberkas.unhas.ac.id/oauth/authorize?client_id=11&redirect_uri=http://localhost:3000/auth/callback&response_type=code&scope=*", "_top");
+    }
+
     return (
         <div className={styles.login_page}>
             <div className={styles.illustration}>
@@ -12,7 +16,7 @@ const index = () => {
                 <div className={styles.box}>
                     <Image src="/assets/logo_unhas.png" width={46} height={52} alt="Unhas" />
                     <h1 className={styles.app_name}>Sistem Pengarsipan Dokumen Kerja Dosen</h1>
-                    <Link href="/" className={styles.login_btn}>Login with MBerkas</Link>
+                    <button className={styles.login_btn} onClick={loginHandler}>Login with MBerkas</button>
                 </div>
             </div>
         </div>

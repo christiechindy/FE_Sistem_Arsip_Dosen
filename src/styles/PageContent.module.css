@@ -19,18 +19,6 @@
     font-size: 20px;
 }
 
-.tooltip {
-    visibility: hidden;
-    position: absolute;
-    right: 0;
-    top: -24px;
-
-    font-size: 11px;
-    background-color: #ececec;
-    padding: 5px;
-    border-radius: 5px 5px 0 5px;
-}
-
 table.table {
     font-size: 14px;
     width: 100%;
@@ -75,16 +63,21 @@ table.table {
     transition: 0.2s ease-in-out;
 }
 
-/* .table tbody tr:nth-child(2n) {
-    background-color: #eaeaea;
-} */
-
-.table tr:hover {
+.table tbody tr:not(:has(td:only-child)):hover {
     background-color: #F8FAFF;
 }
 
 .table tbody tr td:first-child {
     width: 20px;
+}
+
+.table tr .noData { /*no data*/
+    text-align: center;
+    color: #989898;
+}
+
+.table tr .noData:hover {
+    cursor: not-allowed;
 }
 
 .iconlink {
@@ -139,19 +132,24 @@ div.iconlink:hover {
     width: 100%;
 }
 
-.contents .field input:focus {
+.contents .field input:focus, .contents .field input:hover {
     outline: none;
     border: 1.5px solid var(--blueprimary);
 }
 
 .contents .field {
-    margin-bottom: 20px;
+    margin-top: 20px;
+}
+
+.contents .field #startY, #endY {
+    width: 80px
 }
 
 .contents .action_btn {
     display: flex;
     gap: 12px;
     justify-content: flex-end;
+    margin-top: 20px;
 }
 
 .contents .action_btn button {
@@ -178,10 +176,117 @@ div.iconlink:hover {
 }
 
 .action_btn .save:hover {
-    background-color: #001CB0;
+    background-color: #006BCD;
 }
 
 .action_btn .cancel:hover {
-    border: 2px solid red;
+    border: 2px solid #e20000;
     color: red;
+}
+
+.field input[type="file"] {
+    padding: 0;
+    
+}
+
+.field input[type="file"]::-webkit-file-upload-button {
+    background-color: var(--blueprimary);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    margin-right: 16px;
+    font-family: "Readex Pro";
+}
+
+.namafile {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--blueprimary);
+    text-decoration: underline;
+    padding: 8px 16px;
+    border: 1.5px solid #dadada;
+    border-radius: 10px;
+    transition: 0.2s ease-in-out;
+}
+
+.namafile:hover {
+    color: #001CB0;
+    cursor: pointer;
+}
+
+.add_input {
+    width: 100%;
+    border: 1px solid #dadada;
+    background-color: #d6f0ff;
+    color: #0075FF;
+    font-size: 14px;
+    border-radius: 10px;
+
+    transition: 0.2s ease-in-out;
+}
+
+.add_input:hover {
+    background-color: #c0e7fd;
+}
+
+.inputtanPerOrg {
+    position: relative;
+    font-size: 14px;
+    margin-bottom: 7px;
+}
+
+.inputtanPerOrg>div>div:hover {
+    outline: none;
+    border: 1.5px solid var(--blueprimary);
+}
+
+.inputtanPerOrg div:hover div[class$="menu"] {
+    border: none;
+}
+
+.inputtanPerOrg div[class$="control"] {
+    padding-left: 16px;
+    box-sizing: border-box;
+    height: min-content;
+}
+
+.inputtanPerOrg div[class$="singleValue"] {
+    color: black;
+    margin: 0;
+    height: 100%;
+}
+
+.inputtanPerOrg div[class$="Input"], .inputtanPerOrg div[class$="ValueContainer"] {
+    padding: 0;
+    margin: 0;
+}
+
+.delPerson {
+    position: absolute;
+    right: 50px;
+    top: calc(50% - 8px);
+
+    background-color: #bababa;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transition: 0.2s ease-in-out;
+    z-index: 3;
+}
+
+.delPerson:hover {
+    cursor: pointer;
+    background-color: red;
+}
+
+.delPerson * {
+    object-fit: cover;
+    width: 13px;
+    height: 13px;
+    fill: white;
 }
