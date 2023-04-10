@@ -1,11 +1,14 @@
-import Layout from "@/components/Layout"
-import styles from "../../styles/PageContent.module.css"
-import XDel from '../../assets/XDel';
-import Select from "react-select";
-import { useState, MouseEvent, useEffect } from "react";
-import { useRouter } from "next/router";
-import { TDosenDD, TRespDosen } from './Types';
+"use client";
+import Layout from '@/components/Layout';
+import Link from 'next/link';
+import styles from "../../styles/PageContent.module.css";
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import { TDataPenelitian, TResponse, TRespDosen, TDosenDD } from './Types';
 import axios from 'axios';
+import Select from "react-select";
+import Loading from '@/components/Loading';
+import XDel from '../../assets/XDel';
 
 const mhsdummy = [
     {
@@ -18,10 +21,22 @@ const mhsdummy = [
     },
 ]
 
-const TambahPenelitian = () => {
-    /* 
-        --- Input Dosen ---
-    */
+const EditPenelitian = () => {
+    const router = useRouter();
+    const props = router.query;
+    const id = props.id;
+
+    const [loading, setLoading] = useState<boolean>(false);
+
+    const [judul, setJudul] = useState<string>("");
+    const [tahun, setTahun] = useState<string>("");
+    const [dosenFields, setDosenFields] = useState([
+        {value: "", label: ""}
+    ])
+    const [mhsFields, setMhsFields] = useState([
+        {value: "", label: ""}
+    ])
+
     const [dosenData, setDosenData] = useState<TDosenDD[]>([]);
 
     // Get dosen data to display for options
@@ -39,110 +54,43 @@ const TambahPenelitian = () => {
         getAllDosen();
     }, [])
 
-    const [dosenFields, setDosenFields] = useState([
-        {value: "", label: ""}
-    ])
-
-    const handleDosenChange = (nip: string, nama_dosen: string, idx: number) => {
-        let data = [...dosenFields];
-        data[idx].value = nip;
-        data[idx].label = nama_dosen;
-        setDosenFields(data);
-        console.log(dosenFields);
-    }
-
-    const addDosenField = () => {
-        setDosenFields([...dosenFields, {value: "", label: ""}])
-    }
-
-    const delDosenField = (nip: string) => {
-        setDosenFields(dosenFields.filter(dsn => dsn.value !== nip));
-    }
-    //----------------------------------------------------
-
-    /* 
-        --- Input Mahasiswa ---
-    */
-    const [mhsFields, setMhsFields] = useState([
-        {value: "", label: ""}
-    ])
-
-    const handleMhsChange = (nim: string, nama_mahasiswa: string, idx: number) => {
-        let data = [...mhsFields];
-        data[idx].value = nim;
-        data[idx].label = nama_mahasiswa;
-        setMhsFields(data);
-    }
-
-    const addMhsField = () => {
-        setMhsFields([...mhsFields, {value: "", label: ""}])
-    }
-
-    const delMhsField = (nim: string) => {
-        setMhsFields(mhsFields.filter(mhs => mhs.value !== nim));
-    }
-    //----------------------------------------------------
-
-    /* 
-        --- Judul, Tahun Penelitian ---
-    */
-    const [judul, setJudul] = useState<string>("");
-    const [tahun, setTahun] = useState<string>("");
-    const [filee, setFilee] = useState<File | null>(null);
-
-    //----------------------------------------------------
-
-    /* 
-        --- Save, Cancel Handler ---
-    */
-    const router = useRouter();
-
-    const cancelHandler = (e: MouseEvent<HTMLButtonElement>) => {
-        e.preventDefault();
-        router.back();
-    }
-
-    const saveHandler = async () => {
-        try {
-            const formData = new FormData();
-            formData.append("judul_penelitian", judul);
-            formData.append("tahun_penelitian", tahun);
-            formData.append("file_penelitian", filee as any);
-
-            for (let i = 0; i < dosenFields.length; i++) {
-                let key = `dosen_nip[${i}]`;
-                formData.append(key, dosenFields[i].value);
-            }
-            for (let i = 0; i < mhsFields.length; i++) {
-                let key = `mahasiswa_nim[${i}]`;
-                formData.append(key, mhsFields[i].value);
-            }
-
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/addPenelitian`, formData);
-            console.log(res);
-        } catch (err) {
-            console.log(err);
-        } finally {
-            router.back();
+    const getDataPenelitian = async () => {
+        setLoading(true);
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/getPenelitianById/${id}`);
+        const data:TDataPenelitian = res.data.data;
+        setJudul(data.judul_penelitian);
+        setTahun(data.tahun_penelitian.toString());
+        let dosen = [];
+        for (let i = 0; i < data.dosen.length; i++) {
+            dosen.push({value: data.dosen[i].nip, label: data.dosen[i].nama_dosen});
         }
+        let mhs = [];
+        for (let i = 0; i < data.mahasiswa.length; i++) {
+            mhs.push({value: data.mahasiswa[i].nim, label: data.mahasiswa[i].nama_mahasiswa});
+        }
+        setDosenFields(dosen);
+        setMhsFields(mhs);
+        setLoading(false);
     }
-    //----------------------------------------------------
 
+    useEffect(() => {
+        getDataPenelitian();
+    }, [])
+    
     return (
         <Layout>
+            {/* {loading ? <Loading /> : ""} */}
             <div className={styles.page}>
                 <div className={styles.top}>
-                    <div className={styles.current_page}>
-                        Tambah Penelitian
-                    </div>
+                    <div className={styles.current_page}>Edit Data Penelitian</div>
                 </div>
 
                 <div className={styles.contents}>
                     <div className={styles.field}>
                         <label htmlFor="judul">Judul Penelitian</label>
-                        <input type="text" id="judul" value={judul} onChange={(e) => setJudul(e.target.value)} />
+                        <input type="text" id="judul" value={judul}/>
                     </div>
-
+                    
                     <div className={styles.field}>
                         <label htmlFor="tahun">Tahun</label>
                         <input type="number" id="tahun" value={tahun} onChange={(e) => setTahun(e.target.value)} />
@@ -166,7 +114,7 @@ const TambahPenelitian = () => {
                                             fontWeight: "400",
                                         }),
                                     }}
-                                    onChange={opt => handleDosenChange(opt!.value, opt!.label, idx)}
+                                    // onChange={opt => handleDosenChange(opt!.value, opt!.label, idx)}
                                 />
                                 <div className={styles.delPerson} onClick={() => delDosenField(input.value)}><XDel/></div>
                             </div>
@@ -199,24 +147,10 @@ const TambahPenelitian = () => {
                             </div>
                         ))}
                     </div>
-                    <button className={styles.add_input} onClick={addMhsField}>Add</button>
-                
-                    <div className={styles.field}>
-                        <label htmlFor="file">File</label>
-                        <input type="file" id="file" onChange={e => {
-                            if (!e.target.files) return;
-                            setFilee(e.target.files[0])
-                        }} />
-                    </div>
-
-                    <div className={styles.action_btn}>
-                        <button className={styles.cancel} onClick={cancelHandler}>Cancel</button>
-                        <button className={styles.save} onClick={saveHandler}>Save</button>
-                    </div>
                 </div>
             </div>
         </Layout>
     )
 }
 
-export default TambahPenelitian
+export default EditPenelitian

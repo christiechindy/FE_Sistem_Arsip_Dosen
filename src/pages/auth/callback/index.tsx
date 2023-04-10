@@ -1,6 +1,6 @@
 import axios from "axios"
 import { useEffect } from "react"
-
+import styles from "../../../styles/Loader.module.css"
 
 const index = () => {
     useEffect(() => {
@@ -11,28 +11,18 @@ const index = () => {
         const formData = new FormData();
         formData.append("code", code);
 
-        fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/signin`, {
-            method: "POST",
-            // credentials: "include",
-            headers: {
-                "Accept": "*/*",
-                "Access-Control-Allow-Origin": "*",
-                "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE",
-                "Content-Type": "multipart/form-data"
-            },
-            body: code
-        }).then((res) => console.log(res))
+        const SignIn = async () => {
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/login`, formData);
+            console.log(res);
+        }
 
-        // const postCode = async () => {
-        //     const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/signin`, code);
-        //     console.log("rest in peace", res);
-        // }
-
-        // postCode();
+        SignIn();
     }, [])
 
     return (
-        <div>index</div>
+        <div className={styles.container}>
+            <div className={styles.loader}></div>
+        </div>
     )
 }
 

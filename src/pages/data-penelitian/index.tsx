@@ -6,105 +6,48 @@ import PencilIcon from '../../assets/PencilIcon';
 import DeleteIcon from "@/assets/DeleteIcon";
 import React, { useState, useEffect } from 'react';
 import Modal from "@/components/DeleteModal";
-import { TResponse, TReturn, TDataPenelitian } from './Interfaces';
+import { TResponse, TDataPenelitian } from './Types';
 import UpFileModal from "@/components/UpFileModal";
 import { useRouter } from "next/router";
+import Router from "next/router";
 import Loading from "@/components/Loading";
+import axios from 'axios';
 
 // interface IProps {
 //     data_penelitian: TResponse;
 // }
 
-const dataPenelitian_dummy:TResponse = {
-    status: "SUCCESS",
-    code: 200,
-    message: "-",
-    count: 2,
-    data: [
-        {
-            id: "987djkhjfkhdk",
-            judul_penelitian: "Judul 1",
-            tahun_penelitian: 2020,
-            dosen: [
-                {
-                    nip: "83647836578364",
-                    nama_dosen: "Prof. Indrabayu Amirullah"
-                },
-                {
-                    nip: "1",
-                    nama_dosen: "Kosong Satu"
-                }
-            ],
-            mahasiswa: [
-                {
-                    nim: "D121201077",
-                    nama_mahasiswa: "Chindy"
-                },
-                {
-                    nim: "D121201068",
-                    nama_mahasiswa: "Mahasiswa"
-                }
-            ],
-            file_penelitian: "/KTP.pdf"
-        },
-        {
-            id: "khkhsdjkfhdsjk",
-            judul_penelitian: "Judul 2",
-            tahun_penelitian: 2020,
-            dosen: [
-                {
-                    nip: "8326478628362",
-                    nama_dosen: "Prof. Ansar Suyuti"
-                },
-                {
-                    nip: "1",
-                    nama_dosen: "Kosong Satu"
-                }
-            ],
-            mahasiswa: [
-                {
-                    nim: "D121201004",
-                    nama_mahasiswa: "Adit"
-                }
-            ],
-            file_penelitian: "/KTP.pdf"
-        },
-    ]
-} 
-
 const DataPenelitian = () => {
     const [showDelModal, setShowDelModal] = useState<boolean>(false);
     const [showUpFileModal, setShowUpFileModal] = useState<boolean>(false);
 
-    const [dataPenelitian, setDataPenelitian] = useState<TDataPenelitian[]>(dataPenelitian_dummy.data);
-    const [loading, setLoading] = useState<boolean>(false);
-
-    const router = useRouter();
-
-    const [count, setCount] = useState<number>(2);
-
     /* Get ALl Data Penelitian -> run at first render */
-    // useEffect(() => {
-    //     setLoading(true);
-    //     fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/getAllPenelitian`)
-    //         .then((res) => res.json())
-    //         .then((data:TResponse) => {
-    //             setCount(data.count);
-    //             setDataPenelitian(data.data);
-    //             console.log(data);
-    //             setLoading(false);
-    //         })
-    //         .catch(err => console.error("Error: ", err));
-    // }, [])
+    const [dataPenelitian, setDataPenelitian] = useState<TDataPenelitian[]>();
+    const [loading, setLoading] = useState<boolean>(false);
+    const [count, setCount] = useState<number>();
+    
+    useEffect(() => {
+        setLoading(true);
+        
+        const getDataPenelitian = async () => {
+            const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/getAllPenelitian`);
+            const res:TResponse = ax.data;
+            setCount(res.count);
+            setDataPenelitian(res.data);
+            setLoading(false);
+        }
 
-    /* DELETE A DATA-PENELITIAN */
+        getDataPenelitian();
+    }, [])
+
+    /* Delete a research data */
     const [id_to_del, setId_to_del] = useState<string>("");
     const [sure_to_del, setSure_to_del] = useState<boolean>(false);
 
     const deleteHandler = async (id: string) => {
         await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/deletePenelitianById/${id}`, {
             method: "DELETE"
-        }).then(() => setDataPenelitian(dataPenelitian.filter(d => d.id !== id)))
+        }).then(() => setDataPenelitian(dataPenelitian?.filter(d => d.id !== id)))
         count!==undefined ? setCount(count-1) : "";
         console.log("count", count);
     }
@@ -124,7 +67,11 @@ const DataPenelitian = () => {
     }, [showDelModal])
     /*------------------------------------------*/
 
-    /* OPEN FILE */
+    /* Edit Data */
+    
+
+
+    /* Open file */
     const fileOpenHandler = async (id: string) => {
         console.log("fileOpenHandler clickesd");
         console.log(id);
@@ -176,14 +123,9 @@ const DataPenelitian = () => {
                                 <td><Link href={{
                                     pathname: "/data-penelitian/edit-data",
                                     query: {
-                                        id: data.id,
-                                        judul_penelitian: data.judul_penelitian,
-                                        tahun_penelitian: data.tahun_penelitian,
-                                        // dosen_peneliti: data.dosen_peneliti,
-                                        // terlibat: data.terlibat,
-                                        file_penelitian: data.file_penelitian,
+                                        id: data.id
                                     }
-                                }} className={styles.iconlink}>
+                                    }} className={styles.iconlink}>
                                     <PencilIcon />
                                 </Link></td>
                                 <td><div className={styles.iconlink} onClick={() => {

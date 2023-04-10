@@ -244,6 +244,10 @@ div.iconlink:hover {
     border: none;
 }
 
+.inputtanPerOrg div[class$="menu"] {
+    z-index: 4;
+}
+
 .inputtanPerOrg div[class$="control"] {
     padding-left: 16px;
     box-sizing: border-box;
@@ -254,11 +258,14 @@ div.iconlink:hover {
     color: black;
     margin: 0;
     height: 100%;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .inputtanPerOrg div[class$="Input"], .inputtanPerOrg div[class$="ValueContainer"] {
     padding: 0;
     margin: 0;
+    height: 36px;
 }
 
 .delPerson {
