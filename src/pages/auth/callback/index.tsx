@@ -1,22 +1,30 @@
 import axios from "axios"
-import { useEffect } from "react"
+import { useEffect, useContext } from "react"
 import styles from "../../../styles/Loader.module.css"
+import { TTokenData } from "./Types"
+import { useRouter } from "next/router"
 
 const index = () => {
+    const router = useRouter();
+
     useEffect(() => {
         const windowhref = window.location.href
         const code = windowhref.split("code=")[1]
         console.log(code)
 
-        const formData = new FormData();
-        formData.append("code", code);
-
-        const SignIn = async () => {
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/login`, formData);
-            console.log(res);
+        const SignIn = async (code: string, thenhome: any) => {
+            await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/login`, {code})
+                .then((res) => res.data)
+                .then((data:TTokenData) => {
+                    localStorage.setItem("access_token", data.access_token)
+                    console.log("success login");
+                })
+            thenhome();
         }
 
-        SignIn();
+        SignIn(code, function() {
+            router.push("/home");
+        });
     }, [])
 
     return (

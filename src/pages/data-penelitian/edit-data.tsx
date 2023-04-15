@@ -9,6 +9,7 @@ import axios from 'axios';
 import Select from "react-select";
 import Loading from '@/components/Loading';
 import XDel from '../../assets/XDel';
+import { auth } from '@/utils/token';
 
 const mhsdummy = [
     {
@@ -42,7 +43,7 @@ const EditPenelitian = () => {
     // Get dosen data to display for options
     useEffect(() => {
         const getAllDosen = async () => {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/dosen/getAllDosen`);
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/dosen/getAllDosen`, auth);
             const data:TRespDosen = res.data;
             let dosenDD = [];
             for (let i = 0; i < data.count; i++) {
@@ -56,7 +57,7 @@ const EditPenelitian = () => {
 
     const getDataPenelitian = async () => {
         setLoading(true);
-        const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/getPenelitianById/${id}`);
+        const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/getPenelitianById/${id}`, auth);
         const data:TDataPenelitian = res.data.data;
         setJudul(data.judul_penelitian);
         setTahun(data.tahun_penelitian.toString());

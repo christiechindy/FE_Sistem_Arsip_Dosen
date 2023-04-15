@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import Loading from "@/components/Loading";
 import Link from "next/link";
 import { useState } from "react";
-import styles from "../styles/PageContent.module.css";
+import styles from "../../styles/PageContent.module.css";
 
 const RekognisiNarsum = () => {
     const [loading, setLoading] = useState<boolean>(false);

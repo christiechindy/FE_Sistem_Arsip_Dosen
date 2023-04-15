@@ -6,6 +6,7 @@ import { useState, MouseEvent, useEffect } from "react";
 import { useRouter } from "next/router";
 import { TDosenDD, TRespDosen } from './Types';
 import axios from 'axios';
+import { auth } from "@/utils/token";
 
 const mhsdummy = [
     {
@@ -27,7 +28,7 @@ const TambahPenelitian = () => {
     // Get dosen data to display for options
     useEffect(() => {
         const getAllDosen = async () => {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/dosen/getAllDosen`);
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/dosen/getAllDosen`, auth);
             const data:TRespDosen = res.data;
             let dosenDD = [];
             for (let i = 0; i < data.count; i++) {
@@ -118,7 +119,7 @@ const TambahPenelitian = () => {
                 formData.append(key, mhsFields[i].value);
             }
 
-            const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/addPenelitian`, formData);
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/addPenelitian`, formData, auth);
             console.log(res);
         } catch (err) {
             console.log(err);

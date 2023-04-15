@@ -1,10 +1,12 @@
+"use client";
+
 import FileIcon from "@/assets/FileIcon";
 import Layout from "@/components/Layout";
 import Link from "next/link";
 import styles from "../../styles/PageContent.module.css";
 import PencilIcon from '../../assets/PencilIcon';
 import DeleteIcon from "@/assets/DeleteIcon";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import Modal from "@/components/DeleteModal";
 import { TResponse, TDataPenelitian } from './Types';
 import UpFileModal from "@/components/UpFileModal";
@@ -25,16 +27,24 @@ const DataPenelitian = () => {
     const [dataPenelitian, setDataPenelitian] = useState<TDataPenelitian[]>();
     const [loading, setLoading] = useState<boolean>(false);
     const [count, setCount] = useState<number>();
-    
+
     useEffect(() => {
-        setLoading(true);
-        
+        setLoading(true);    
+
+        const auth = {
+            headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` }
+        };
+
         const getDataPenelitian = async () => {
-            const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/getAllPenelitian`);
-            const res:TResponse = ax.data;
-            setCount(res.count);
-            setDataPenelitian(res.data);
-            setLoading(false);
+            try {
+                const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/getAllPenelitian`, auth);
+                const res:TResponse = ax.data;
+                setCount(res.count);
+                setDataPenelitian(res.data);
+                setLoading(false);
+            } catch (err) {
+                console.log(err);
+            }
         }
 
         getDataPenelitian();
@@ -45,11 +55,14 @@ const DataPenelitian = () => {
     const [sure_to_del, setSure_to_del] = useState<boolean>(false);
 
     const deleteHandler = async (id: string) => {
-        await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/deletePenelitianById/${id}`, {
-            method: "DELETE"
-        }).then(() => setDataPenelitian(dataPenelitian?.filter(d => d.id !== id)))
-        count!==undefined ? setCount(count-1) : "";
-        console.log("count", count);
+        try {
+            console.log("id yg mau didel", id);
+            await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/deletePenelitianById/${id}`).then(() => setDataPenelitian(dataPenelitian?.filter(d => d.id !== id)))
+            count!==undefined ? setCount(count-1) : "";
+            console.log("count", count);
+        } catch (err) {
+            console.log(err);
+        }
     }
 
     useEffect(() => {
