@@ -14,6 +14,7 @@ import { useRouter } from "next/router";
 import Router from "next/router";
 import Loading from "@/components/Loading";
 import axios from 'axios';
+import { auth, getToken } from "@/utils/token";
 
 // interface IProps {
 //     data_penelitian: TResponse;
@@ -30,10 +31,6 @@ const DataPenelitian = () => {
 
     useEffect(() => {
         setLoading(true);    
-
-        const auth = {
-            headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` }
-        };
 
         const getDataPenelitian = async () => {
             try {
@@ -56,8 +53,7 @@ const DataPenelitian = () => {
 
     const deleteHandler = async (id: string) => {
         try {
-            console.log("id yg mau didel", id);
-            await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/deletePenelitianById/${id}`).then(() => setDataPenelitian(dataPenelitian?.filter(d => d.id !== id)))
+            await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/deletePenelitianById/${id}`, auth).then((res) => setDataPenelitian(dataPenelitian?.filter(d => d.id !== id)))
             count!==undefined ? setCount(count-1) : "";
             console.log("count", count);
         } catch (err) {
@@ -88,13 +84,15 @@ const DataPenelitian = () => {
     const fileOpenHandler = async (id: string) => {
         console.log("fileOpenHandler clickesd");
         console.log(id);
-        await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/getFilePenelitianById/${id}`, {
-            method: "GET"
-        }).then((res) => res.blob())
-          .then((blob) => {
+        await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/getFilePenelitianById/${id}`, {
+            headers: {Authorization: `Bearer ${getToken()}`},
+            responseType: 'blob'
+        })
+        .then((res) => res.data)
+        .then((blob) => {
             const url = window.URL.createObjectURL(blob);
             window.open(url);
-          })
+        })
     }
     /*------------------------------------------*/
 
@@ -103,7 +101,7 @@ const DataPenelitian = () => {
             <div className={styles.page}>
                 <div className={styles.top}>
                     <div className={styles.current_page}>List Data Penelitian</div>
-                    <Link href="/data-penelitian/add-data" className="add_btn">Tambah</Link>
+                    <Link href="/data-penelitian/write-data" className="add_btn">Tambah</Link>
                     <div className="tooltip">Upload file penelitian</div>
                 </div>
                 {loading ? <div className={styles.loadingContainer}><Loading /></div> : "" }
@@ -134,7 +132,7 @@ const DataPenelitian = () => {
                                     <FileIcon />
                                 </div></td>
                                 <td><Link href={{
-                                    pathname: "/data-penelitian/edit-data",
+                                    pathname: "/data-penelitian/write-data",
                                     query: {
                                         id: data.id
                                     }

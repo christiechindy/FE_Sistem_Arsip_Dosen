@@ -7,7 +7,7 @@ export type TDataPenelitian = {
     mahasiswa: TMhsTerlibat[];
 }
 
-export type TDosenDD = {
+export type TDropDown = {
     value: string;
     label: string
 }
@@ -17,6 +17,13 @@ export type TRespDosen = {
     data: TDosen[];
     message: string;
     status: string;
+}
+
+export type TRespMhs = {
+    status: string;
+    message: string;
+    count: number;
+    data: TMhsTerlibat[];
 }
 
 export type TDosen = {

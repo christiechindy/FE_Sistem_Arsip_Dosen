@@ -4,26 +4,15 @@ import XDel from '../../assets/XDel';
 import Select from "react-select";
 import { useState, MouseEvent, useEffect } from "react";
 import { useRouter } from "next/router";
-import { TDosenDD, TRespDosen } from './Types';
+import { TDropDown, TRespDosen, TRespMhs } from './Types';
 import axios from 'axios';
 import { auth } from "@/utils/token";
-
-const mhsdummy = [
-    {
-        value: "D121201077",
-        label: "Chindy Christie"
-    }, 
-    {
-        value: "D121201004",
-        label: "Fauzan Adithya Z.M."
-    },
-]
 
 const TambahPenelitian = () => {
     /* 
         --- Input Dosen ---
     */
-    const [dosenData, setDosenData] = useState<TDosenDD[]>([]);
+    const [dosenData, setDosenData] = useState<TDropDown[]>([]);
 
     // Get dosen data to display for options
     useEffect(() => {
@@ -64,6 +53,23 @@ const TambahPenelitian = () => {
     /* 
         --- Input Mahasiswa ---
     */
+    const [mhsData, setMhsData] = useState<TDropDown[]>([]);
+
+    // Get Mhs Data to display for options
+    useEffect(() => {
+        const getAllMhs = async () => {
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/mahasiswa/getAllMahasiswa`, auth);
+            const data:TRespMhs = res.data;
+            let mhsDD = [];
+            for (let i = 0; i < data.count; i++) {
+                mhsDD.push({value: data.data[i].nim, label: data.data[i].nama_mahasiswa});
+            }
+            setMhsData(mhsDD);
+        }
+
+        getAllMhs();
+    }, [])
+    
     const [mhsFields, setMhsFields] = useState([
         {value: "", label: ""}
     ])
@@ -175,13 +181,12 @@ const TambahPenelitian = () => {
                     </div>
                     <button className={styles.add_input} onClick={addDosenField}>Add</button>
 
-
                     <div className={styles.field}>
                         <label>Mahasiswa yang Terlibat</label>
                         {mhsFields.map((input, idx) => (
                             <div className={styles.inputtanPerOrg}>
                                 <Select 
-                                    options={mhsdummy}
+                                    options={mhsData}
                                     value={input}
                                     styles={{
                                         control: (baseStyles, state) => ({

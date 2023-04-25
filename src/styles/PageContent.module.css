@@ -100,7 +100,7 @@ table.table {
     cursor: pointer;
 }
 
-div.iconlink:hover {
+td:last-child .iconlink:hover {
     fill: #ff0000;
 }
 
@@ -186,7 +186,6 @@ div.iconlink:hover {
 
 .field input[type="file"] {
     padding: 0;
-    
 }
 
 .field input[type="file"]::-webkit-file-upload-button {
