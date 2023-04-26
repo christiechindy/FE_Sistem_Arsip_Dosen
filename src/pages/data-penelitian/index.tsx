@@ -53,7 +53,19 @@ const DataPenelitian = () => {
 
     const deleteHandler = async (id: string) => {
         try {
-            await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/deletePenelitianById/${id}`, auth).then((res) => setDataPenelitian(dataPenelitian?.filter(d => d.id !== id)))
+            await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/deletePenelitianById/${id}`, {
+                headers: {
+                    "Content-Type": 'application/json',
+                    'Authorization': 'Bearer ' +getToken()
+                },
+                _method: "post"
+            }).then((res) => setDataPenelitian(dataPenelitian?.filter(d => d.id !== id)))
+
+            // fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/deletePenelitianById/${id}`, {
+            //     headers: {Authentication: `Bearer ${getToken()}`},
+            //     method: "DELETE"
+            // }).then((res) => setDataPenelitian(dataPenelitian?.filter(d => d.id !== id)))
+
             count!==undefined ? setCount(count-1) : "";
             console.log("count", count);
         } catch (err) {
