@@ -296,3 +296,50 @@ td:last-child .iconlink:hover {
     height: 13px;
     fill: white;
 }
+
+/*------------Input Loading--------------*/
+.loadingInput {
+    animation: skeleton-loading 0.7s linear infinite alternate;
+    cursor: not-allowed;
+}
+
+.contents .field .loadingInput:hover {
+    border: 1.5px solid #d7d7d7;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-color: hsl(0, 0%, 97%);
+    }
+    100% {
+        background-color: hsl(0, 0%, 100%);
+    }
+}
+
+/*------------Object Tag to Display PDF-----------*/
+.object {
+    margin-bottom: 10px;
+}
+
+.pdfTop div {
+    font-size: 12px;
+    color: #ff0000;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+}
+
+.explVis {
+    visibility: visible;
+}
+
+.explHid {
+    visibility: hidden;
+}
+
+.pdfTop {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
