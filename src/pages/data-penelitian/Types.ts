@@ -3,6 +3,7 @@ export type TDataPenelitian = {
     judul_penelitian: string;
     tahun_penelitian: number;
     file_penelitian: string;
+    ketua: TDosen;
     dosen: TDosen[];
     mahasiswa: TMhsTerlibat[];
 }
@@ -43,10 +44,35 @@ export type TMhsTerlibat = {
     prodi: string | null;
 }
 
-export type TResponse = {
+export type TRespPenelitian = {
     status: string;
     code: number;
     message: string;
     count: number;
     data: TDataPenelitian[]
+}
+
+export type TResp1Penelitian = {
+    status: string;
+    code: number;
+    message: string;
+    data: TDataPenelitian;
+}
+
+export type TDosenPy = {
+    nama_dosen: string;
+    nip: string;
+}
+
+export type TMhsPy = {
+    nama_mahasiswa: string;
+    nim: string;
+}
+
+export type TDataOCRScan = {
+    judul_penelitian: string;
+    tahun_penelitian: string;
+    ketua_penelitian: TDosenPy;
+    dosen: TDosenPy[];
+    mahasiswa: TMhsPy[];
 }

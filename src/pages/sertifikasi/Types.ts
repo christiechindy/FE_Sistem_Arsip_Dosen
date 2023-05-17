@@ -1,15 +1,23 @@
 export type TDataSertif = {
     id: string;
-    judul_sertifikat_dosen: string;
-    tahun_sertifikat_dosen: number;
-    file_sertifikat_dosen: string;
+    judul_sertifikat: string;
+    tahun_sertifikat: number;
+    file_sertifikat: string;
+    jenis_sertifikat: string;
     dosen_nip: string;
 }
 
-export type TResponse = {
+export type TRespSertif = {
     status: string;
     code: number;
     message: string;
     count: number;
     data: TDataSertif[]
+}
+
+export type TResp1Sertif = {
+    status: string;
+    code: number;
+    message: string;
+    data: TDataSertif;
 }

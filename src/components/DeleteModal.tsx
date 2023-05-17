@@ -1,7 +1,6 @@
 import styles from "../styles/DeleteModal.module.css";
-import App from '../pages/_app';
 import WarningIcon from "@/assets/WarningIcon";
-import React, { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 interface IProps {
     showDelModal: boolean;

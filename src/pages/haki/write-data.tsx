@@ -1,12 +1,17 @@
 import Layout from "@/components/Layout"
 import styles from "../../styles/PageContent.module.css"
-import { useState, MouseEvent, ChangeEvent, useEffect } from "react"
+import { useState, MouseEvent, ChangeEvent, useEffect, useContext } from "react"
 import axios from "axios";
-import { auth, getToken } from "@/utils/token";
 import { useRouter } from "next/router";
 import { TData1HAKI, TResp1HAKI } from "./Types";
+import { UserContext } from "@/context/UserContext";
 
 const WriteData = () => {
+    const {accessToken, nip} = useContext(UserContext);
+    const auth = {
+        headers: { Authorization: `Bearer ${accessToken}` }
+    };
+
     const router = useRouter();
     const props = router.query;
     const mode = props.mode;
@@ -18,27 +23,23 @@ const WriteData = () => {
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        const getHakiData = async (id: string | string[] | undefined, thenDisplayPDF: any) => {
+        const getHakiData = async (id: string | string[] | undefined) => {
             setLoading(true);
             const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/haki/getHakiById/${id}`, auth);
             const res:TResp1HAKI = ax.data;
             const data:TData1HAKI = res.data;
-            setJudul(data.judul_haki);
+            setJudul(data.judul_haki); //ksh data?. nanti smua spy biar di refresh tdk error
             setTahun(data.tahun_haki.toString());
             setLoading(false);
-
-            thenDisplayPDF();
         }
 
         const displayPDF = async (id: string | string[] | undefined) => {
-            fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/haki/getFileHakiById/${id}`, {
-                method: "GET",
-                headers: {
-                    Authorization: `Bearer ${getToken()}`,
-                },
-                cache: "default",
+            console.log("dipanggil ji displayPDF")
+            axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/haki/getFileHakiById/${id}`, {
+                headers: auth.headers,
+                responseType: 'blob'
             })
-            .then((res) => res.blob())
+            .then((res) => res.data)
             .then((blob) => {
                 const pdf = window.URL.createObjectURL(blob);
                 const object = document.querySelector("object");
@@ -48,9 +49,8 @@ const WriteData = () => {
         }
 
         if (id !== "-1") {
-            getHakiData(id, async function() {
-                displayPDF(id);
-            });
+            getHakiData(id);
+            displayPDF(id);
         }
     }, [id])
 
@@ -61,6 +61,7 @@ const WriteData = () => {
 
     const saveHandler = async() => {
         const formData = new FormData();
+        formData.append("dosen_nip", nip);
         formData.append("judul_haki", judul);
         formData.append("tahun_haki", tahun);
 
@@ -114,7 +115,7 @@ const WriteData = () => {
                                 <label>File</label>
                                 <div className={explVis ? styles.explVis : styles.explHid}>Jika file salah upload, hapuslah data ini dan silahkan mengupload ulang</div>
                             </div>
-                            <object className={styles.object} data="" width="100%" height="400px" onMouseOver={() => setExplVis(true)} onMouseLeave={() => setExplVis(false)} />
+                            {(loading) ? <input style={{height: "300px"}} className={styles.loadingInput} type="text" /> : <object className={styles.object} data="" width="100%" height="400px" onMouseOver={() => setExplVis(true)} onMouseLeave={() => setExplVis(false)} />}
                         </div>
                         :
                         <div className={styles.field}>

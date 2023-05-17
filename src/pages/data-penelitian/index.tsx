@@ -1,5 +1,3 @@
-"use client";
-
 import FileIcon from "@/assets/FileIcon";
 import Layout from "@/components/Layout";
 import Link from "next/link";
@@ -8,26 +6,26 @@ import PencilIcon from '../../assets/PencilIcon';
 import DeleteIcon from "@/assets/DeleteIcon";
 import React, { useState, useEffect, useContext } from 'react';
 import Modal from "@/components/DeleteModal";
-import { TResponse, TDataPenelitian } from './Types';
+import { TRespPenelitian, TDataPenelitian } from './Types';
 import UpFileModal from "@/components/UpFileModal";
 import { useRouter } from "next/router";
 import Router from "next/router";
 import Loading from "@/components/Loading";
 import axios from 'axios';
-import { auth, getToken } from "@/utils/token";
-
-// interface IProps {
-//     data_penelitian: TResponse;
-// }
+import { getToken } from "@/utils/token";
+import { fileOpenHandler } from "@/utils/pdfOpen";
+import { UserContext } from "@/context/UserContext";
 
 const DataPenelitian = () => {
-    const [showDelModal, setShowDelModal] = useState<boolean>(false);
-    const [showUpFileModal, setShowUpFileModal] = useState<boolean>(false);
-
-    /* Get ALl Data Penelitian -> run at first render */
-    const [dataPenelitian, setDataPenelitian] = useState<TDataPenelitian[]>();
+    const {accessToken} = useContext(UserContext);
+    const auth = {
+        headers: { Authorization: `Bearer ${accessToken}` }
+    };
     const [loading, setLoading] = useState<boolean>(false);
     const [count, setCount] = useState<number>();
+
+    /* Get ALl Data Penelitian */
+    const [dataPenelitian, setDataPenelitian] = useState<TDataPenelitian[]>();
 
     useEffect(() => {
         setLoading(true);    
@@ -35,7 +33,7 @@ const DataPenelitian = () => {
         const getDataPenelitian = async () => {
             try {
                 const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/getAllPenelitian`, auth);
-                const res:TResponse = ax.data;
+                const res:TRespPenelitian = ax.data;
                 setCount(res.count);
                 setDataPenelitian(res.data);
                 setLoading(false);
@@ -48,23 +46,17 @@ const DataPenelitian = () => {
     }, [])
 
     /* Delete a research data */
+    const [showDelModal, setShowDelModal] = useState<boolean>(false);
     const [id_to_del, setId_to_del] = useState<string>("");
     const [sure_to_del, setSure_to_del] = useState<boolean>(false);
 
     const deleteHandler = async (id: string) => {
         try {
-            await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/deletePenelitianById/${id}`, {
-                headers: {
-                    "Content-Type": 'application/json',
-                    'Authorization': 'Bearer ' +getToken()
-                },
-                _method: "post"
+            await axios({
+                headers: auth.headers,
+                method: 'post',
+                url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/deletePenelitianById/${id}/`
             }).then((res) => setDataPenelitian(dataPenelitian?.filter(d => d.id !== id)))
-
-            // fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/deletePenelitianById/${id}`, {
-            //     headers: {Authentication: `Bearer ${getToken()}`},
-            //     method: "DELETE"
-            // }).then((res) => setDataPenelitian(dataPenelitian?.filter(d => d.id !== id)))
 
             count!==undefined ? setCount(count-1) : "";
             console.log("count", count);
@@ -88,36 +80,31 @@ const DataPenelitian = () => {
     }, [showDelModal])
     /*------------------------------------------*/
 
-    /* Edit Data */
-    
+    /* File Modal */
+    const [showUpFileModal, setShowUpFileModal] = useState<boolean>(false);
 
-
-    /* Open file */
-    const fileOpenHandler = async (id: string) => {
-        console.log("fileOpenHandler clickesd");
-        console.log(id);
-        await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/getFilePenelitianById/${id}`, {
-            headers: {Authorization: `Bearer ${getToken()}`},
-            responseType: 'blob'
-        })
-        .then((res) => res.data)
-        .then((blob) => {
-            const url = window.URL.createObjectURL(blob);
-            window.open(url);
-        })
-    }
     /*------------------------------------------*/
 
     return (
-        <Layout>
+        <Layout> 
             <div className={styles.page}>
                 <div className={styles.top}>
                     <div className={styles.current_page}>List Data Penelitian</div>
-                    <Link href="/data-penelitian/write-data" className="add_btn">Tambah</Link>
+                    <Link href={{
+                        pathname: "/data-penelitian/write-data",
+                        query: {
+                            mode: "add",
+                            id: "-1"
+                        }
+                    }} className="add_btn">Tambah</Link>
+                    <div onClick={() => setShowUpFileModal(true)}>Tambah</div>
                     <div className="tooltip">Upload file penelitian</div>
                 </div>
+
                 {loading ? <div className={styles.loadingContainer}><Loading /></div> : "" }
+
                 {showUpFileModal ? <UpFileModal showUpFileModal={showUpFileModal} setShowUpFileModal={setShowUpFileModal} /> : ""}
+
                 <table className={styles.table}>
                     <thead>
                         <tr>
@@ -140,12 +127,13 @@ const DataPenelitian = () => {
                                 <td>{data.tahun_penelitian}</td>
                                 <td>{data.dosen.map(dsn => (dsn.nama_dosen + (data.dosen[data.dosen.length-1].nip!==dsn.nip ? ", " : "")) )}</td>
                                 <td>{data.mahasiswa.map(mhs => (mhs.nama_mahasiswa + (data.mahasiswa[data.mahasiswa.length-1].nim!==mhs.nim ? ", " : "")))}</td>
-                                <td><div className={styles.iconlink} onClick={() => fileOpenHandler(data.id)}>
+                                <td><div className={styles.iconlink} onClick={() => fileOpenHandler(data.id, "/api/v1/penelitian/getFilePenelitianById/")}>
                                     <FileIcon />
                                 </div></td>
                                 <td><Link href={{
                                     pathname: "/data-penelitian/write-data",
                                     query: {
+                                        mode: "edit",
                                         id: data.id
                                     }
                                     }} className={styles.iconlink}>

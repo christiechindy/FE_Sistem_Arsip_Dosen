@@ -343,3 +343,23 @@ td:last-child .iconlink:hover {
     align-items: center;
     gap: 10px;
 }
+
+/*------------------Input Dropdown Select---------------*/
+/* .field select {
+    background-color: #fff;
+    border: 1.5px solid #dadada;
+    border-radius: 10px;
+    font-family: "Readex Pro";
+    padding: 8px 12px;
+}
+
+.field select:focus, .field select:hover {
+    outline: none;
+    border: 1.5px solid var(--blueprimary);
+}
+
+.field select option li {
+    line-height: 30px;
+    margin-bottom: 30px;
+    padding: 30px;
+} */

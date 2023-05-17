@@ -1,24 +1,28 @@
 import Layout from "@/components/Layout";
 import styles from "../../styles/PageContent.module.css";
 import Link from 'next/link';
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { TDataHAKI, TRespHAKI } from "./Types";
 import axios from "axios";
-import { auth } from "@/utils/token";
 import FileIcon from '@/assets/FileIcon';
 import PencilIcon from "@/assets/PencilIcon";
 import DeleteIcon from "@/assets/DeleteIcon";
 import Loading from "@/components/Loading";
-import { getToken } from "@/utils/token";
+import Modal from "@/components/DeleteModal";
+import { fileOpenHandler } from "@/utils/pdfOpen";
+import { UserContext } from "@/context/UserContext";
 
 const Haki = () => {
+    const {accessToken} = useContext(UserContext);
+    const auth = {
+        headers: { Authorization: `Bearer ${accessToken}` }
+    };
+
     const [dataHAKI, setDataHAKI] = useState<TDataHAKI[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [count, setCount] = useState<number>();
 
     useEffect(() => {
-        console.log("dalam useeffect")
-        console.log("status loading ", loading)
         setLoading(true);
 
         const getAllHAKI = async () => {
@@ -36,19 +40,33 @@ const Haki = () => {
         getAllHAKI();
     }, [])
 
-    const fileOpenHandler = async (id: string) => {
-        console.log("fileOpenHandler clickesd");
-        console.log(id);
-        await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/haki/getFileHakiById/${id}`, {
-            headers: {Authorization: `Bearer ${getToken()}`},
-            responseType: 'blob'
-        })
-        .then((res) => res.data)
-        .then((blob) => {
-            const url = window.URL.createObjectURL(blob);
-            window.open(url);
-        })
+    const [showDelModal, setShowDelModal] = useState<boolean>(false);
+    const [id_to_del, setId_to_del] = useState<string>("");
+    const [sure_to_del, setSure_to_del] = useState<boolean>(false);
+
+    const deleteHandler = async (id: string) => {
+        await axios({
+            headers: auth.headers,
+            method: 'post',
+            url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/haki/deleteHakiById/${id}/`
+        }).then((res) => setDataHAKI(dataHAKI?.filter(d => d.id !== id)));
+
+        count!==undefined ? setCount(count-1) : "";
     }
+
+    useEffect(() => {
+        if (sure_to_del) {
+            deleteHandler(id_to_del);
+            setShowDelModal(false);
+        }
+    }, [sure_to_del])
+
+    useEffect(() => {
+        if (!showDelModal) {
+            setId_to_del("");
+            setSure_to_del(false);
+        }
+    }, [showDelModal])
 
     return (
         <Layout>
@@ -83,7 +101,7 @@ const Haki = () => {
                                 <td>{idx+1}</td>
                                 <td>{data.judul_haki}</td>
                                 <td>{data.tahun_haki}</td>
-                                <td><div className={styles.iconlink} onClick={() => fileOpenHandler(data.id)}>
+                                <td><div className={styles.iconlink} onClick={() => fileOpenHandler(data.id, "/api/v1/haki/getFileHakiById/")}>
                                     <FileIcon/>
                                 </div></td>
                                 <td><Link href={{
@@ -95,13 +113,17 @@ const Haki = () => {
                                 }} className={styles.iconlink}>
                                     <PencilIcon />    
                                 </Link></td>
-                                <td><div className={styles.iconlink}>
+                                <td><div className={styles.iconlink} onClick={() => {
+                                    setShowDelModal(true);
+                                    setId_to_del(data.id);
+                                }}>
                                     <DeleteIcon />
                                 </div></td>
                             </tr>
                         ))}
                     </tbody>
                 </table>
+                {showDelModal ? <Modal showDelModal={showDelModal} setShowDelModal={setShowDelModal} setSure_to_del={setSure_to_del}/> : ""}
             </div>
         </Layout>
     );
