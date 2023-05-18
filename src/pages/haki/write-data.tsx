@@ -5,10 +5,11 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { TData1HAKI, TResp1HAKI } from "./Types";
 import { UserContext } from "@/context/UserContext";
-import { InputFileField, InputTextField, InputYearField } from "@/components/InputField";
+import { InputDropDownTunggal, InputFileField, InputTextField, InputYearField } from "@/components/InputField";
+import { TDropDown, TRespDosen } from "../CommonTypes";
 
 const WriteData = () => {
-    const {accessToken, nip} = useContext(UserContext);
+    const {accessToken, nip, role} = useContext(UserContext);
     const auth = {
         headers: { Authorization: `Bearer ${accessToken}` }
     };
@@ -55,6 +56,23 @@ const WriteData = () => {
         }
     }, [id])
 
+    /* getALlDosen -> admin pilih dosen yang mau diinputkan datanya */
+    const [dosenData, setDosenData] = useState<TDropDown[]>([]);
+    const [chosenNip, setChosenNip] = useState<string>("");
+    useEffect(() => {
+        const getAllDosen = async () => {
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/dosen/getAllDosen`, auth);
+            const data:TRespDosen = res.data;
+            let dosenDD = [];
+            for (let i = 0; i < data.count; i++) {
+                dosenDD.push({value: data.data[i].nip, label: data.data[i].nama});
+            }
+            setDosenData(dosenDD);
+        }
+
+        getAllDosen();
+    }, [role])
+
     const cancelHandler = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         router.back();
@@ -62,7 +80,11 @@ const WriteData = () => {
 
     const saveHandler = async() => {
         const formData = new FormData();
-        formData.append("dosen_nip", nip);
+        if (role === 1) { // jika admin
+            formData.append("dosen_nip", chosenNip);
+        } else { // jika dosen
+            formData.append("dosen_nip", nip);
+        }
         formData.append("judul_haki", judul);
         formData.append("tahun_haki", tahun);
 
@@ -100,6 +122,17 @@ const WriteData = () => {
                 </div>
 
                 <div className={styles.contents}>
+                    {role === 1 ? 
+                        <InputDropDownTunggal
+                            loading={loading}
+                            label="Dosen"
+                            optionsData={dosenData}
+                            nip={chosenNip}
+                            setNip={setChosenNip}
+                        />
+                        : ""
+                    }
+
                     <InputTextField loading={loading} label="Judul HAKI" value={judul} setValue={setJudul} />
 
                     <InputYearField loading={loading} label="Tahun" value={tahun} setValue={setTahun}/>

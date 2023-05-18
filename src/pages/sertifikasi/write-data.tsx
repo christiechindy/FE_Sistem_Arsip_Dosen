@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useEffect, useState, ChangeEvent, MouseEvent, useContext } from "react";
+import { useEffect, useState, MouseEvent, useContext } from "react";
 import { TDataSertif, TResp1Sertif } from "./Types";
 import Layout from "@/components/Layout";
 import styles from "../../styles/PageContent.module.css"
-import Select from "react-select";
 import { UserContext } from "@/context/UserContext";
-import { InputDropDownField, InputFileField, InputTextField, InputYearField } from "@/components/InputField";
+import { InputDropDownField, InputDropDownTunggal, InputFileField, InputTextField, InputYearField } from "@/components/InputField";
+import { TDropDown, TRespDosen } from "../CommonTypes";
 
 const WriteData = () => {
     const {accessToken, nip, role} = useContext(UserContext);
@@ -57,6 +57,23 @@ const WriteData = () => {
         }
     }, [id])
 
+    /* getALlDosen -> admin pilih dosen yang mau diinputkan datanya */
+    const [dosenData, setDosenData] = useState<TDropDown[]>([]);
+    const [chosenNip, setChosenNip] = useState<string>("");
+    useEffect(() => {
+        const getAllDosen = async () => {
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/dosen/getAllDosen`, auth);
+            const data:TRespDosen = res.data;
+            let dosenDD = [];
+            for (let i = 0; i < data.count; i++) {
+                dosenDD.push({value: data.data[i].nip, label: data.data[i].nama});
+            }
+            setDosenData(dosenDD);
+        }
+
+        getAllDosen();
+    }, [role])
+
     const cancelHandler = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         router.back();
@@ -64,7 +81,11 @@ const WriteData = () => {
 
     const saveHandler = async() => {
         const formData = new FormData();
-        formData.append("dosen_nip", nip);
+        if (role === 1) { // jika admin
+            formData.append("dosen_nip", chosenNip);
+        } else { // jika dosen
+            formData.append("dosen_nip", nip);
+        }
         formData.append("judul_sertifikat", judul);
         formData.append("tahun_sertifikat", tahun);
         formData.append("jenis_sertifikat", jenis);
@@ -105,6 +126,17 @@ const WriteData = () => {
                 </div>
 
                 <div className={styles.contents}>
+                    {role === 1 ? 
+                        <InputDropDownTunggal
+                            loading={loading}
+                            label="Dosen"
+                            optionsData={dosenData}
+                            nip={chosenNip}
+                            setNip={setChosenNip}
+                        />
+                        : ""
+                    }
+
                     <InputTextField loading={loading} label="Judul Sertifikat" value={judul} setValue={setJudul} />
 
                     <InputYearField loading={loading} label="Tahun Sertifikat" value={tahun} setValue={setTahun} />

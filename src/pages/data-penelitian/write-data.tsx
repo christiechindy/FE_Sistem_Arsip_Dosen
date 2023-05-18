@@ -1,14 +1,13 @@
 import Layout from "@/components/Layout"
 import styles from "../../styles/PageContent.module.css"
-import XDel from '../../assets/XDel';
-import Select from "react-select";
 import { useState, MouseEvent, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
-import { TDataOCRScan, TDataPenelitian, TDropDown, TMhsPy, TResp1Penelitian, TRespDosen, TRespMhs } from './Types';
+import { TDataOCRScan, TDataPenelitian, TResp1Penelitian } from './Types';
+import { TDropDown, TMhsPy, TRespDosen } from "../CommonTypes";
 import axios from 'axios';
 import { auth, getToken } from "@/utils/token";
 import { FileContext } from "@/context/FileContext";
-import { InputTextField, InputYearField } from "@/components/InputField";
+import { InputDropDownDosen, InputDropDownTunggal, InputDropDownMahasiswa, InputTextField, InputYearField } from "@/components/InputField";
 
 const TambahPenelitian = () => {
     const router = useRouter();
@@ -272,79 +271,31 @@ const TambahPenelitian = () => {
 
                     <InputYearField loading={loading} label="Tahun" value={tahun} setValue={setTahun}/>
 
-                    <div className={styles.field}>
-                        <label>Ketua Peneliti</label>
-                        {loading ? <input type="text" className={styles.loadingInput} /> : <div className={styles.inputtanPerOrg}>
-                            <Select
-                                options={dosenData}
-                                styles={{
-                                    control: (baseStyles, state) => ({
-                                        ...baseStyles,
-                                        border: state.isFocused ? "1.5px solid #0085FF" : "1.5px solid #dadada",
-                                        borderRadius: "10px",
-                                        outline: state.isFocused ? "none" : "",
-                                        fontSize: "14px",
-                                        paddingLeft: "8px",
-                                        fontWeight: "400",
-                                    }),
-                                }}
-                                value={{value: ketuaNip, label: dosenData.find(d => d.value === ketuaNip)?.label}}
-                                onChange={(opt) => setKetuaNip(opt!.value)}
-                            />
-                        </div>}
-                    </div>
+                    <InputDropDownTunggal
+                        label="Ketua Peneliti"
+                        loading={loading}
+                        optionsData={dosenData}
+                        nip={ketuaNip}
+                        setNip={setKetuaNip}
+                    />
 
-                    <div className={styles.field}>
-                        <label>Dosen Anggota Peneliti</label>
-                        {loading ? <input type="text" className={styles.loadingInput} style={{marginBottom: "7px"}} /> : dosenFields.map((input, idx) => (
-                            <div className={styles.inputtanPerOrg}>
-                                <Select 
-                                    options={dosenData}
-                                    value={input}
-                                    styles={{
-                                        control: (baseStyles, state) => ({
-                                            ...baseStyles,
-                                            border: state.isFocused ? "1.5px solid #0085FF" : "1.5px solid #dadada",
-                                            borderRadius: "10px",
-                                            outline: state.isFocused ? "none" : "",
-                                            fontSize: "14px",
-                                            paddingLeft: "8px",
-                                            fontWeight: "400",
-                                        }),
-                                    }}
-                                    onChange={opt => handleDosenChange(opt!.value, opt!.label, idx)}
-                                />
-                                <div className={styles.delPerson} onClick={() => delDosenField(input.value)}><XDel/></div>
-                            </div>
-                        ))}
-                    </div>
+                    <InputDropDownDosen 
+                        loading={loading} 
+                        dosenFields={dosenFields} 
+                        dosenData={dosenData}
+                        handleDosenChange={handleDosenChange}
+                        delDosenField={delDosenField}
+                    />
                     <button className={styles.add_input} onClick={addDosenField}>Add</button>
 
-                    <div className={styles.field}>
-                        <label>Mahasiswa yang Terlibat</label>
-                        {loading ? <input type="text" className={styles.loadingInput} style={{marginBottom: "7px"}} /> : mhsFields.map((input, idx) => (
-                            <div className={styles.inputtanPerOrg}>
-                                <Select 
-                                    options={mhsData}
-                                    value={input}
-                                    styles={{
-                                        control: (baseStyles, state) => ({
-                                            ...baseStyles,
-                                            border: state.isFocused ? "1.5px solid #0085FF" : "1.5px solid #dadada",
-                                            borderRadius: "10px",
-                                            outline: state.isFocused ? "none" : "",
-                                            fontSize: "14px",
-                                            paddingLeft: "8px",
-                                            fontWeight: "400",
-                                        }),
-                                    }}
-                                    onChange={opt => handleMhsChange(opt!.value, opt!.label, idx)}
-                                    onInputChange={handleInputChange}
-                                />
-                                <div className={styles.delPerson} onClick={() => delMhsField(input.value)}><XDel /></div>
-                            </div>
-                        ))}
-                    </div>
+                    <InputDropDownMahasiswa 
+                        loading={loading} 
+                        mhsFields={mhsFields} 
+                        mhsData={mhsData} 
+                        handleMhsChange={handleMhsChange} 
+                        handleInputChange={handleInputChange} 
+                        delMhsField={delMhsField} 
+                    />
                     <button className={styles.add_input} onClick={addMhsField}>Add</button>
 
                     {mode==="edit" ? 

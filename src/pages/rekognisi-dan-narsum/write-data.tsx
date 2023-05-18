@@ -6,10 +6,11 @@ import styles from "../../styles/PageContent.module.css"
 import Layout from "@/components/Layout";
 import Select from "react-select";
 import { UserContext } from "@/context/UserContext";
-import { InputDropDownField, InputFileField, InputTextField, InputYearField } from "@/components/InputField";
+import { InputDropDownField, InputDropDownTunggal, InputFileField, InputTextField, InputYearField } from "@/components/InputField";
+import { TDropDown, TRespDosen } from "../CommonTypes";
 
 const WriteData = () => {
-    const {accessToken, nip} = useContext(UserContext);
+    const {accessToken, nip, role} = useContext(UserContext);
     const auth = {
         headers: { Authorization: `Bearer ${accessToken}` }
     };
@@ -57,6 +58,23 @@ const WriteData = () => {
         }
     }, [id])
 
+    /* getALlDosen -> admin pilih dosen yang mau diinputkan datanya */
+    const [dosenData, setDosenData] = useState<TDropDown[]>([]);
+    const [chosenNip, setChosenNip] = useState<string>("");
+    useEffect(() => {
+        const getAllDosen = async () => {
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/dosen/getAllDosen`, auth);
+            const data:TRespDosen = res.data;
+            let dosenDD = [];
+            for (let i = 0; i < data.count; i++) {
+                dosenDD.push({value: data.data[i].nip, label: data.data[i].nama});
+            }
+            setDosenData(dosenDD);
+        }
+
+        getAllDosen();
+    }, [role])
+
     const cancelHandler = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
         router.back();
@@ -64,7 +82,11 @@ const WriteData = () => {
 
     const saveHandler = async() => {
         const formData = new FormData();
-        formData.append("dosen_nip", nip);
+        if (role === 1) { // jika admin
+            formData.append("dosen_nip", chosenNip);
+        } else { // jika dosen
+            formData.append("dosen_nip", nip);
+        }
         formData.append("judul_rekognisi_narsum", judul);
         formData.append("tahun_rekognisi_narsum", tahun);
         formData.append("jenis_rekognisi_narsum", jenis);
@@ -105,6 +127,17 @@ const WriteData = () => {
                 </div>
 
                 <div className={styles.contents}>
+                    {role === 1 ? 
+                        <InputDropDownTunggal
+                            loading={loading}
+                            label="Dosen"
+                            optionsData={dosenData}
+                            nip={chosenNip}
+                            setNip={setChosenNip}
+                        />
+                        : ""
+                    }
+
                     <InputDropDownField loading={loading} label="Jenis" options={[
                         {value: "Rekognisi", label: "Rekognisi"},
                         {value: "Narsum", label: "Narsum"},

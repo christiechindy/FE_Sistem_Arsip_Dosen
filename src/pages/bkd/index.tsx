@@ -10,7 +10,6 @@ import React , {useContext, useEffect, useState} from 'react'
 import DeleteIcon from "@/assets/DeleteIcon";
 import Modal from "@/components/DeleteModal";
 import Loading from "@/components/Loading";
-import { useRouter } from 'next/router';
 import axios from "axios";
 import { fileOpenHandler } from "@/utils/pdfOpen";
 import { UserContext } from "@/context/UserContext";

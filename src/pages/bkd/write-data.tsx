@@ -7,12 +7,12 @@ import { ChangeEvent, MouseEvent, useContext } from "react";
 import {useState, useEffect} from 'react';
 import axios from "axios";
 import { TDataBKD, TResp1BKD } from "./Types";
-import Select from "react-select";
 import { UserContext } from "@/context/UserContext";
-import { InputDropDownField, InputFileField, InputYearRangeField } from "@/components/InputField";
+import { InputDropDownField, InputDropDownTunggal, InputFileField, InputYearRangeField } from "@/components/InputField";
+import { TDropDown, TRespDosen } from "../CommonTypes";
 
 const AddData = () => {
-    const {accessToken, nip} = useContext(UserContext);
+    const {accessToken, nip, role} = useContext(UserContext);
     const auth = {
         headers: { Authorization: `Bearer ${accessToken}` }
     };
@@ -35,10 +35,10 @@ const AddData = () => {
             const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/bkd/getBkdById/${id}`, auth);
             const res:TResp1BKD = ax.data;
             const data:TDataBKD = res.data;
-            setJudul(data.judul_bkd);
-            setStartY(data.start_year.toString());
-            setEndY(data.end_year.toString());
-            setSemester(data.semester);
+            setJudul(data?.judul_bkd);
+            setStartY(data?.start_year.toString());
+            setEndY(data?.end_year.toString());
+            setSemester(data?.semester);
             setLoading(false);
         }
 
@@ -60,23 +60,24 @@ const AddData = () => {
             getBKDData(id);
             displayPDF(id);
         }
-    }, [id])        
+    }, [id])
 
-    const changeHandler = (e: ChangeEvent<HTMLInputElement>) => {
-        if (e.target.name === "judul") {
-            setJudul(e.target.value);
-        } else if (e.target.name === "startY") {
-            if (e.target.value.length <= 4) {
-                setStartY(e.target.value);
-            } 
-        } else if (e.target.name === "endY") {
-            if (e.target.value.length <= 4) {
-                setEndY(e.target.value);
+    /* getALlDosen -> admin pilih dosen yang mau diinputkan datanya */
+    const [dosenData, setDosenData] = useState<TDropDown[]>([]);
+    const [chosenNip, setChosenNip] = useState<string>("");
+    useEffect(() => {
+        const getAllDosen = async () => {
+            const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/dosen/getAllDosen`, auth);
+            const data:TRespDosen = res.data;
+            let dosenDD = [];
+            for (let i = 0; i < data.count; i++) {
+                dosenDD.push({value: data.data[i].nip, label: data.data[i].nama});
             }
-        } else if (e.target.name === "semester") {
-            setSemester(e.target.value);
+            setDosenData(dosenDD);
         }
-    }
+
+        getAllDosen();
+    }, [role])
 
     const cancelHandler = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
@@ -85,7 +86,12 @@ const AddData = () => {
 
     const saveHandler = async() => {
         const formData = new FormData();
-        formData.append("dosen_nip", nip);
+        
+        if (role === 1) { // jika admin
+            formData.append("dosen_nip", chosenNip);
+        } else { // jika dosen
+            formData.append("dosen_nip", nip);
+        }
         formData.append("judul_bkd", judul);
         formData.append("start_year", startY);
         formData.append("end_year", endY);
@@ -125,6 +131,17 @@ const AddData = () => {
                 </div>
 
                 <div className={styles.contents}>
+                    {role === 1 ? 
+                        <InputDropDownTunggal
+                            loading={loading}
+                            label="Dosen"
+                            optionsData={dosenData}
+                            nip={chosenNip}
+                            setNip={setChosenNip}
+                        />
+                        : ""
+                    }
+
                     <InputDropDownField loading={loading} label="Semester" value={semester} setValue={setSemester} options={[
                         {value: "Genap", label: "Genap"},
                         {value: "Ganjil", label: "Ganjil"},
