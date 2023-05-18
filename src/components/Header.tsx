@@ -10,20 +10,15 @@ import { setCookie } from "cookies-next";
 interface IUser {
     id: number,
     nip: string,
-    role: number,
+    role: number, // ADMIN(role=1), DOSEN(role=2)
     nama: string,
-    administrator: number,
-    jabatan: number,
-    prodi_kode?: string | number,
-    prodi?: string | number,
-    nik?: string,
     remember_token?: string,
     created_at?: string,
     updated_at?: string
 }
 
 export const Header = () => {
-    const {accessToken, profileName, setProfileName, setNip} = useContext(UserContext);
+    const {accessToken, profileName, setProfileName, setNip, setRole} = useContext(UserContext);
     const auth = {
         headers: { Authorization: `Bearer ${accessToken}` }
     };
@@ -32,8 +27,10 @@ export const Header = () => {
         const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/me`, auth);
         const data:IUser = res.data; 
         setProfileName(data.nama);
-        setCookie("nip", data.nip);
+        setRole(data.role);
         setNip(data.nip);
+        setCookie("role", data.role);
+        setCookie("nip", data.nip);
     }
 
     useEffect(() => {

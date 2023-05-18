@@ -15,7 +15,7 @@
 
 .modal_box {
     background-color: rgba(255, 255, 255, 1);
-    padding: 40px;
+    padding: 30px;
     z-index: 3;
     height: 250px;
     width: 440px;
@@ -30,11 +30,42 @@
 .modal_box .content {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    text-align: center;
+    gap: 20px;
+    width: 100%;
+    height: 100%;
 }
 
 .modal_box label {
     font-weight: 500;
     font-size: 1rem;
+}
+
+.modal_box .content input[type="file"] {
+    padding: 0;
+    border-radius: 8px;
+    border: 1.5px solid var(--blueprimary);
+    font-family: "Readex Pro";
+}
+
+.modal_box .content input[type="file"]::-webkit-file-upload-button {
+    background-color: var(--blueprimary);
+    border: none;
+    color: white;
+    padding: 8px 16px;
+    margin-right: 16px;
+    font-family: "Readex Pro";
+}
+
+.modal_box .content .scanBtn {
+    padding: 8px 16px;
+    background-color: var(--blueprimary);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    width: fit-content;
+    margin-right: 0;
+    margin-left: auto;
+    margin-bottom: 0;
+    margin-top: auto;
+    font-size: 15px;
 }

@@ -8,11 +8,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import Modal from "@/components/DeleteModal";
 import { TRespPenelitian, TDataPenelitian } from './Types';
 import UpFileModal from "@/components/UpFileModal";
-import { useRouter } from "next/router";
-import Router from "next/router";
 import Loading from "@/components/Loading";
 import axios from 'axios';
-import { getToken } from "@/utils/token";
 import { fileOpenHandler } from "@/utils/pdfOpen";
 import { UserContext } from "@/context/UserContext";
 
@@ -105,7 +102,7 @@ const DataPenelitian = () => {
                             <th>Nama Penelitian</th>
                             <th>Tahun</th>
                             <th>Peneliti</th>
-                            <th>Terlibat</th>
+                            <th>Mahasiswa</th>
                             <th>File</th>
                             <th>Edit</th>
                             <th>Delete</th>
@@ -118,8 +115,8 @@ const DataPenelitian = () => {
                                 <td>{idx+1}</td>
                                 <td>{data.judul_penelitian}</td>
                                 <td>{data.tahun_penelitian}</td>
-                                <td>{data.dosen.map(dsn => (dsn.nama_dosen + (data.dosen[data.dosen.length-1].nip!==dsn.nip ? ", " : "")) )}</td>
-                                <td>{data.mahasiswa.map(mhs => (mhs.nama_mahasiswa + (data.mahasiswa[data.mahasiswa.length-1].nim!==mhs.nim ? ", " : "")))}</td>
+                                <td>{data.dosen.map(dsn => <p>{dsn.nama + (data.dosen[data.dosen.length-1].nip!==dsn.nip ? "\n" : "")}</p>)}</td>
+                                <td>{data.mahasiswa.map(mhs => <p>{mhs.nama + (data.mahasiswa[data.mahasiswa.length-1].nim!==mhs.nim ? "; \n" : "")}</p> )}</td>
                                 <td><div className={styles.iconlink} onClick={() => fileOpenHandler(data.id, "/api/v1/penelitian/getFilePenelitianById/")}>
                                     <FileIcon />
                                 </div></td>

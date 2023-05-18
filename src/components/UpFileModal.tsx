@@ -34,7 +34,7 @@ const UpFileModal = ({showUpFileModal, setShowUpFileModal}: IProps) => {
                         if (!e.target.files) return;
                         setFileToScan(e.target.files[0])
                     }} />
-                    <Link href={{
+                    <Link className={styles.scanBtn} href={{
                         pathname: "/data-penelitian/write-data",
                         query: {
                             mode: "add",

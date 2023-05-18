@@ -9,6 +9,7 @@ import axios from "axios";
 import { TDataBKD, TResp1BKD } from "./Types";
 import Select from "react-select";
 import { UserContext } from "@/context/UserContext";
+import { InputDropDownField, InputFileField, InputYearRangeField } from "@/components/InputField";
 
 const AddData = () => {
     const {accessToken, nip} = useContext(UserContext);
@@ -124,36 +125,12 @@ const AddData = () => {
                 </div>
 
                 <div className={styles.contents}>
-                    <div className={styles.field}>
-                        <label htmlFor="semester">Semester</label>
-                        {loading ? <input type="text" className={styles.loadingInput} /> : <div className={styles.inputtanPerOrg}>
-                            <Select
-                                options={[
-                                    {value: "Ganjil", label: "Ganjil"},
-                                    {value: "Genap", label: "Genap"}
-                                ]}
-                                styles={{
-                                    control: (baseStyles, state) => ({
-                                        ...baseStyles,
-                                        border: state.isFocused ? "1.5px solid #0085FF" : "1.5px solid #dadada",
-                                        borderRadius: "10px",
-                                        outline: state.isFocused ? "none" : "",
-                                        fontSize: "14px",
-                                        paddingLeft: "8px",
-                                        fontWeight: "400",
-                                    }),
-                                }}
-                                value={{value: semester, label: semester}}
-                                onChange={(opt) => setSemester(opt!.value)}
-                            />
-                        </div>}
-                    </div>
+                    <InputDropDownField loading={loading} label="Semester" value={semester} setValue={setSemester} options={[
+                        {value: "Genap", label: "Genap"},
+                        {value: "Ganjil", label: "Ganjil"},
+                    ]} />
 
-                    <div className={styles.field}>
-                        <label>Tahun Ajaran</label>
-                        <input className={loading ? styles.loadingInput : ""} type="number" id={styles["startY"]} value={startY} name="startY" onChange={changeHandler} />{" - "}
-                        <input className={loading ? styles.loadingInput : ""} type="number" id={styles["endY"]} value={endY} name="endY" onChange={changeHandler} onFocus={() => setEndY((Number(startY)+1).toString())} />
-                    </div>
+                    <InputYearRangeField loading={loading} label="Tahun Ajaran" start={startY} setStart={setStartY} end={endY} setEnd={setEndY} />
 
                     {mode==="edit" ?
                         <div className={styles.field}>
@@ -168,13 +145,7 @@ const AddData = () => {
                             }
                         </div>
                         :
-                        <div className={styles.field}>
-                            <label htmlFor="file">File</label>
-                            <input type="file" id="file" onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                if (!e.target.files) return;
-                                setFilee(e.target.files[0])
-                            }} />
-                        </div>
+                        <InputFileField label="File" setValue={setFilee} />
                     }
 
                     <div className={styles.action_btn}>

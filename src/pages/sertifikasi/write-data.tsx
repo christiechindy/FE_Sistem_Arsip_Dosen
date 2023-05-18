@@ -6,9 +6,10 @@ import Layout from "@/components/Layout";
 import styles from "../../styles/PageContent.module.css"
 import Select from "react-select";
 import { UserContext } from "@/context/UserContext";
+import { InputDropDownField, InputFileField, InputTextField, InputYearField } from "@/components/InputField";
 
 const WriteData = () => {
-    const {accessToken, nip} = useContext(UserContext);
+    const {accessToken, nip, role} = useContext(UserContext);
     const auth = {
         headers: { Authorization: `Bearer ${accessToken}` }
     };
@@ -104,44 +105,14 @@ const WriteData = () => {
                 </div>
 
                 <div className={styles.contents}>
-                    <div className={styles.field}>
-                        <label htmlFor="judul">Judul Sertifikat</label>
-                        <input className={loading ? styles.loadingInput : ""} type="text" id="judul" value={judul} onChange={(e: ChangeEvent<HTMLInputElement>) => setJudul(e.target.value)} />
-                    </div>
+                    <InputTextField loading={loading} label="Judul Sertifikat" value={judul} setValue={setJudul} />
 
-                    <div className={styles.field}>
-                        <label htmlFor="tahun">Tahun Sertifikat</label>
-                        <input className={loading ? styles.loadingInput : ""} type="number" id="tahun" value={tahun} onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            if(e.target.value.length <= 4) {
-                                setTahun(e.target.value);
-                            }
-                        }} />
-                    </div>
+                    <InputYearField loading={loading} label="Tahun Sertifikat" value={tahun} setValue={setTahun} />
 
-                    <div className={styles.field}>
-                        <label htmlFor="jenis">Jenis Sertifikat</label>
-                        {loading ? <input type="text" className={styles.loadingInput} /> : <div className={styles.inputtanPerOrg}>
-                            <Select
-                                options={[
-                                    {value: "Sertifikat Profesi", label: "Sertifikat Profesi"},
-                                    {value: "Sertifikat Dosen", label: "Sertifikat Dosen"}
-                                ]}
-                                styles={{
-                                    control: (baseStyles, state) => ({
-                                        ...baseStyles,
-                                        border: state.isFocused ? "1.5px solid #0085FF" : "1.5px solid #dadada",
-                                        borderRadius: "10px",
-                                        outline: state.isFocused ? "none" : "",
-                                        fontSize: "14px",
-                                        paddingLeft: "8px",
-                                        fontWeight: "400",
-                                    }),
-                                }}
-                                value={{value: jenis, label: jenis}}
-                                onChange={(opt) => setJenis(opt!.value)}
-                            />
-                        </div>}
-                    </div>
+                    <InputDropDownField loading={loading} label="Jenis Sertifikat" value={jenis} setValue={setJenis} options={[
+                        {value: "Sertifikat Profesi", label: "Sertifikat Profesi"},
+                        {value: "Sertifikat Dosen", label: "Sertifikat Dosen"}
+                    ]} />
 
                     {mode==="edit" ?
                         <div className={styles.field}>
@@ -156,13 +127,7 @@ const WriteData = () => {
                             }
                         </div>
                         :
-                        <div className={styles.field}>
-                            <label htmlFor="file">File</label>
-                            <input type="file" id="file" onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                if (!e.target.files) return;
-                                setFilee(e.target.files[0])
-                            }} />
-                        </div>
+                        <InputFileField label="File Sertifikat" setValue={setFilee}/>
                     }
 
                     <div className={styles.action_btn}>

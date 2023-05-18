@@ -4,10 +4,11 @@ import XDel from '../../assets/XDel';
 import Select from "react-select";
 import { useState, MouseEvent, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
-import { TDataOCRScan, TDataPenelitian, TDropDown, TResp1Penelitian, TRespDosen, TRespMhs } from './Types';
+import { TDataOCRScan, TDataPenelitian, TDropDown, TMhsPy, TResp1Penelitian, TRespDosen, TRespMhs } from './Types';
 import axios from 'axios';
 import { auth, getToken } from "@/utils/token";
 import { FileContext } from "@/context/FileContext";
+import { InputTextField, InputYearField } from "@/components/InputField";
 
 const TambahPenelitian = () => {
     const router = useRouter();
@@ -17,7 +18,6 @@ const TambahPenelitian = () => {
 
     const [judul, setJudul] = useState<string>("");
     const [tahun, setTahun] = useState<string>("");
-    // const [ketuaPenelitian, setKetuaPenelitian] = useState<any>({ value: "", label: "" });
     const [ketuaNip, setKetuaNip] = useState<string>("");
     const [loading, setLoading] = useState<boolean>(false);
 
@@ -33,7 +33,7 @@ const TambahPenelitian = () => {
             const data:TRespDosen = res.data;
             let dosenDD = [];
             for (let i = 0; i < data.count; i++) {
-                dosenDD.push({value: data.data[i].nip, label: data.data[i].nama_dosen});
+                dosenDD.push({value: data.data[i].nip, label: data.data[i].nama});
             }
             setDosenData(dosenDD);
         }
@@ -69,32 +69,16 @@ const TambahPenelitian = () => {
     const [mhsData, setMhsData] = useState<TDropDown[]>([]);
 
     // Get Mhs Data to display for options
-    // useEffect(() => {
-    //     const getAllMhs = async () => {
-    //         const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/mahasiswa/getAllMahasiswa`, auth);
-    //         const data:TRespMhs = res.data;
-    //         let mhsDD = [];
-    //         for (let i = 0; i < data.count; i++) {
-    //             mhsDD.push({value: data.data[i].nim, label: data.data[i].nama_mahasiswa});
-    //         }
-    //         setMhsData(mhsDD);
-    //     }
-
-    //     getAllMhs();
-    // }, [])
-
-    const authLuar = {
-        headers: { Authorization : "91S0S6NuiA6lsGWism2h3Pn04dN4dPBH" }
-    }
-    
     useEffect(() => {
         const getAllMhs = async () => {
+            const formData = new FormData();
+            formData.append("typed", inputValue);
             console.log("api to search for name typed");
-            const res = await axios.post(`https://customapi.neosia.unhas.ac.id/getAllNimByKey?key=${inputValue}`, authLuar);
-            const data:TRespMhs = res.data;
+            const res = await axios.post("http://localhost:133/search-mahasiswa", formData);
+            const data:TMhsPy[] = res.data;
             let mhsDD = [];
-            for (let i = 0; i < data.count; i++) {
-                mhsDD.push({value: data.data[i].nim, label: data.data[i].nama_mahasiswa});
+            for (let i = 0; i < data.length; i++) {
+                mhsDD.push({value: data[i].nim, label: data[i].nama_mahasiswa});
             }
             setMhsData(mhsDD);
         }
@@ -108,7 +92,7 @@ const TambahPenelitian = () => {
         {value: "", label: ""}
     ])
 
-    const handleMhsChange = (nim: string, nama_mahasiswa: string, idx: number) => {
+    const handleMhsChange = async (nim: string, nama_mahasiswa: string, idx: number) => {
         let data = [...mhsFields];
         data[idx].value = nim;
         data[idx].label = nama_mahasiswa;
@@ -176,18 +160,20 @@ const TambahPenelitian = () => {
             const data:TDataPenelitian = res.data;
             setJudul(data?.judul_penelitian);
             setTahun(data?.tahun_penelitian.toString());
-            // setKetuaPenelitian({ value: data.ketua.nip, label: data.ketua.nama_dosen })
-
 
             let dosen = [];
-            for (let i = 0; i < data.dosen.length; i++) {
-                dosen.push({value: data.dosen[i].nip, label: data.dosen[i].nama_dosen});
+            for (let i = 0; i < data?.dosen.length; i++) {
+                if (data.dosen[i].status === "ketua") {
+                    setKetuaNip(data.dosen[i].nip);
+                    continue;
+                }
+                dosen.push({value: data.dosen[i].nip, label: data.dosen[i].nama});
             }
             setDosenFields(dosen);
 
             let mhs = [];
-            for (let i = 0; i < data.mahasiswa.length; i++) {
-                mhs.push({value: data.mahasiswa[i].nim, label: data.mahasiswa[i].nama_mahasiswa});
+            for (let i = 0; i < data?.mahasiswa.length; i++) {
+                mhs.push({value: data.mahasiswa[i].nim, label: data.mahasiswa[i].nama});
             }
             setMhsFields(mhs);
 
@@ -238,6 +224,11 @@ const TambahPenelitian = () => {
         for (let i = 0; i < mhsFields.length; i++) {
             let key = `mahasiswa_nim[${i}]`;
             formData.append(key, mhsFields[i].value);
+
+            const formDataMhs = new FormData();
+            formDataMhs.append("nim", mhsFields[i].value);
+            formDataMhs.append("nama", mhsFields[i].label);
+            await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/mahasiswa/addMahasiswa`, formDataMhs, auth);
         }
 
         if (id !== "-1") { // in EDIT mode
@@ -277,15 +268,9 @@ const TambahPenelitian = () => {
                 </div>
 
                 <div className={styles.contents}>
-                    <div className={styles.field}>
-                        <label htmlFor="judul">Judul Penelitian</label>
-                        <input className={loading ? styles.loadingInput : ""} type="text" id="judul" value={judul} onChange={(e) => setJudul(e.target.value)} />
-                    </div>
+                    <InputTextField loading={loading} label="Judul Penelitian" value={judul} setValue={setJudul} />
 
-                    <div className={styles.field}>
-                        <label htmlFor="tahun">Tahun</label>
-                        <input className={loading ? styles.loadingInput : ""} type="number" id="tahun" value={tahun} onChange={(e) => setTahun(e.target.value)} />
-                    </div>
+                    <InputYearField loading={loading} label="Tahun" value={tahun} setValue={setTahun}/>
 
                     <div className={styles.field}>
                         <label>Ketua Peneliti</label>

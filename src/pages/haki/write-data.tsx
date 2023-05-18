@@ -5,6 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { TData1HAKI, TResp1HAKI } from "./Types";
 import { UserContext } from "@/context/UserContext";
+import { InputFileField, InputTextField, InputYearField } from "@/components/InputField";
 
 const WriteData = () => {
     const {accessToken, nip} = useContext(UserContext);
@@ -99,15 +100,9 @@ const WriteData = () => {
                 </div>
 
                 <div className={styles.contents}>
-                    <div className={styles.field}>
-                        <label htmlFor="judul">Judul HAKI</label>
-                        <input className={loading ? styles.loadingInput : ""} type="text" id="judul" value={judul} onChange={(e: ChangeEvent<HTMLInputElement>) => setJudul(e.target.value)}/>
-                    </div>
+                    <InputTextField loading={loading} label="Judul HAKI" value={judul} setValue={setJudul} />
 
-                    <div className={styles.field}>
-                        <label htmlFor="tahun">Tahun</label>
-                        <input className={loading ? styles.loadingInput : ""} type="number" id="tahun" value={tahun} onChange={(e: ChangeEvent<HTMLInputElement>) => setTahun(e.target.value)} />
-                    </div>
+                    <InputYearField loading={loading} label="Tahun" value={tahun} setValue={setTahun}/>
 
                     {mode==="edit" ? 
                         <div className={styles.field}>
@@ -118,13 +113,7 @@ const WriteData = () => {
                             {(loading) ? <input style={{height: "300px"}} className={styles.loadingInput} type="text" /> : <object className={styles.object} data="" width="100%" height="400px" onMouseOver={() => setExplVis(true)} onMouseLeave={() => setExplVis(false)} />}
                         </div>
                         :
-                        <div className={styles.field}>
-                            <label htmlFor="file">File</label>
-                            <input type="file" id="file" onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                if (!e.target.files) return;
-                                setFilee(e.target.files[0])
-                            }} />
-                        </div>
+                        <InputFileField label="File" setValue={setFilee} />
                     }
 
                     <div className={styles.action_btn}>

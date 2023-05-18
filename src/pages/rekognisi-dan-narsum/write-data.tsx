@@ -6,6 +6,7 @@ import styles from "../../styles/PageContent.module.css"
 import Layout from "@/components/Layout";
 import Select from "react-select";
 import { UserContext } from "@/context/UserContext";
+import { InputDropDownField, InputFileField, InputTextField, InputYearField } from "@/components/InputField";
 
 const WriteData = () => {
     const {accessToken, nip} = useContext(UserContext);
@@ -30,9 +31,9 @@ const WriteData = () => {
             const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/rekognisi_narsum/getRekognisiNarsumById/${id}`, auth);
             const res:TResp1RekogNarsum = ax.data;
             const data:TDataRekogNarsum = res.data;
-            setJudul(data.judul_rekognisi_narsum);
-            setTahun(data.tahun_rekognisi_narsum.toString());
-            setJenis(data.jenis_rekognisi_narsum);
+            setJudul(data?.judul_rekognisi_narsum);
+            setTahun(data?.tahun_rekognisi_narsum.toString());
+            setJenis(data?.jenis_rekognisi_narsum);
             setLoading(false);
         }
 
@@ -104,44 +105,14 @@ const WriteData = () => {
                 </div>
 
                 <div className={styles.contents}>
-                    <div className={styles.field}>
-                        <label htmlFor="jenis">Jenis</label>
-                        {loading ? <input type="text" className={styles.loadingInput} /> : <div className={styles.inputtanPerOrg}>
-                            <Select
-                                options={[
-                                    {value: "Rekognisi", label: "Rekognisi"},
-                                    {value: "Narsum", label: "Narsum"}
-                                ]}
-                                styles={{
-                                    control: (baseStyles, state) => ({
-                                        ...baseStyles,
-                                        border: state.isFocused ? "1.5px solid #0085FF" : "1.5px solid #dadada",
-                                        borderRadius: "10px",
-                                        outline: state.isFocused ? "none" : "",
-                                        fontSize: "14px",
-                                        paddingLeft: "8px",
-                                        fontWeight: "400",
-                                    }),
-                                }}
-                                value={{value: jenis, label: jenis}}
-                                onChange={(opt) => setJenis(opt!.value)}
-                            />
-                        </div>}
-                    </div>
+                    <InputDropDownField loading={loading} label="Jenis" options={[
+                        {value: "Rekognisi", label: "Rekognisi"},
+                        {value: "Narsum", label: "Narsum"},
+                    ]} value={jenis} setValue={setJenis} />
 
-                    <div className={styles.field}>
-                        <label htmlFor="judul">Judul {jenis!=="" ? jenis : ""}</label>
-                        <input className={loading ? styles.loadingInput : ""} type="text" id="judul" value={judul} onChange={(e: ChangeEvent<HTMLInputElement>) => setJudul(e.target.value)} />
-                    </div>
+                    <InputTextField loading={loading} label={"Judul " + (jenis!=="" ? jenis : "")} value={judul} setValue={setJudul} />
 
-                    <div className={styles.field}>
-                        <label htmlFor="tahun">Tahun {jenis!=="" ? jenis : ""}</label>
-                        <input className={loading ? styles.loadingInput : ""} type="number" id="tahun" value={tahun} onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                            if(e.target.value.length <= 4) {
-                                setTahun(e.target.value);
-                            }
-                        }} />
-                    </div>
+                    <InputYearField loading={loading} label={"Tahun " + (jenis!=="" ? jenis : "")} value={tahun} setValue={setTahun} />
 
                     {mode==="edit" ?
                         <div className={styles.field}>
@@ -156,13 +127,7 @@ const WriteData = () => {
                             }
                         </div>
                         :
-                        <div className={styles.field}>
-                            <label htmlFor="file">File</label>
-                            <input type="file" id="file" onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                                if (!e.target.files) return;
-                                setFilee(e.target.files[0])
-                            }} />
-                        </div>
+                        <InputFileField label="File" setValue={setFilee} />
                     }
 
                     <div className={styles.action_btn}>
@@ -173,7 +138,6 @@ const WriteData = () => {
             </div>
         </Layout>
     );
-    
 }
 
 export default WriteData

@@ -3,7 +3,6 @@ export type TDataPenelitian = {
     judul_penelitian: string;
     tahun_penelitian: number;
     file_penelitian: string;
-    ketua: TDosen;
     dosen: TDosen[];
     mahasiswa: TMhsTerlibat[];
 }
@@ -30,18 +29,16 @@ export type TRespMhs = {
 export type TDosen = {
     id: string;
     nip: string;
-    nama_dosen: string;
-    email_dosen: string | null;
-    pangkat_dosen: string | null;
+    nama: string;
+    email: string | null;
+    pangkat: string | null;
+    status: string;
 }
 
 export type TMhsTerlibat = {
     id: string;
     nim: string;
-    nama_mahasiswa: string;
-    email_mahasiswa: string | null;
-    fakultas: string | null;
-    prodi: string | null;
+    nama: string;
 }
 
 export type TRespPenelitian = {
