@@ -129,7 +129,6 @@ const TambahPenelitian = () => {
             console.log("data ocr dari api", data);
             setJudul(data?.judul_penelitian);
             setTahun(data?.tahun_penelitian);
-            // setKetuaPenelitian({ value: data.ketua_penelitian.nip, label: data.ketua_penelitian.nama_dosen })
             setKetuaNip(data?.ketua_penelitian.nip);
 
             const pdf = window.URL.createObjectURL(fileToScan);

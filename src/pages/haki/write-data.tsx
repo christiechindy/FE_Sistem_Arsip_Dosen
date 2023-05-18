@@ -30,8 +30,8 @@ const WriteData = () => {
             const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/haki/getHakiById/${id}`, auth);
             const res:TResp1HAKI = ax.data;
             const data:TData1HAKI = res.data;
-            setJudul(data.judul_haki); //ksh data?. nanti smua spy biar di refresh tdk error
-            setTahun(data.tahun_haki.toString());
+            setJudul(data?.judul_haki); //ksh data?. nanti smua spy biar di refresh tdk error
+            setTahun(data?.tahun_haki.toString());
             setLoading(false);
         }
 
@@ -62,7 +62,7 @@ const WriteData = () => {
     useEffect(() => {
         const getAllDosen = async () => {
             const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/dosen/getAllDosen`, auth);
-            const data:TRespDosen = res.data;
+            const data:TRespDosen = res?.data;
             let dosenDD = [];
             for (let i = 0; i < data.count; i++) {
                 dosenDD.push({value: data.data[i].nip, label: data.data[i].nama});

@@ -31,9 +31,9 @@ const WriteData = () => {
             const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/sertifikat/getSertifikatById/${id}`, auth);
             const res:TResp1Sertif = ax.data;
             const data:TDataSertif = res.data;
-            setJudul(data.judul_sertifikat);
-            setTahun(data.tahun_sertifikat.toString());
-            setJenis(data.jenis_sertifikat);
+            setJudul(data?.judul_sertifikat);
+            setTahun(data?.tahun_sertifikat.toString());
+            setJenis(data?.jenis_sertifikat);
             setLoading(false);
         }
 
