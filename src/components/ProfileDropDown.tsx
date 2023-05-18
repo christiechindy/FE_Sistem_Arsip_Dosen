@@ -7,7 +7,8 @@ const ProfileDropDown = () => {
 
     const LogOutHandler = () => {
         deleteCookie("access_token");
-        deleteCookie("nama");
+        deleteCookie("profile_name");
+        deleteCookie("nip");
         router.push("/login");
     }
 

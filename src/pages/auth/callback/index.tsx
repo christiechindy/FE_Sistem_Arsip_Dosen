@@ -1,10 +1,9 @@
 import axios from "axios"
 import { useEffect, useContext } from "react"
 import styles from "../../../styles/Loader.module.css"
-import { TTokenData, TUserData } from "./Types"
+import { TTokenData } from "./Types"
 import { useRouter } from "next/router"
 import { setCookie } from "cookies-next"
-import { auth } from "@/utils/token"
 import { UserContext } from "@/context/UserContext"
 
 const index = () => {

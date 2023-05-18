@@ -9,8 +9,8 @@ interface IProps {
 
 export const UserContextProvider = ({children}: IProps) => {
     const [accessToken, setAccessToken] = useState<CookieValueTypes>(getCookie("access_token") || null);
-    const [profileName, setProfileName] = useState<string | null>();
-    const [nip, setNip] = useState<string | null>();
+    const [profileName, setProfileName] = useState<string>("");
+    const [nip, setNip] = useState<CookieValueTypes>(getCookie("nip") || null);
 
     return(
         <UserContext.Provider value={{accessToken, setAccessToken, profileName, setProfileName, nip, setNip}}>

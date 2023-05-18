@@ -4,8 +4,8 @@ import DownTriangle from "@/assets/DownTriangle";
 import { useContext, useEffect, useState } from "react";
 import ProfileDropDown from "./ProfileDropDown";
 import axios from "axios";
-import { auth } from "@/utils/token";
 import { UserContext } from "@/context/UserContext";
+import { setCookie } from "cookies-next";
 
 interface IUser {
     id: number,
@@ -23,16 +23,21 @@ interface IUser {
 }
 
 export const Header = () => {
-    const {profileName, setProfileName, setNip} = useContext(UserContext);
+    const {accessToken, profileName, setProfileName, setNip} = useContext(UserContext);
+    const auth = {
+        headers: { Authorization: `Bearer ${accessToken}` }
+    };
+
     const getUser = async () => {
         const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/me`, auth);
         const data:IUser = res.data; 
         setProfileName(data.nama);
+        setCookie("nip", data.nip);
         setNip(data.nip);
     }
 
     useEffect(() => {
-        if (profileName === undefined) {
+        if (profileName === "") {
             getUser();
         }
     }, []);

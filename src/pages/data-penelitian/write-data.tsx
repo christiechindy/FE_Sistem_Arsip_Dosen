@@ -65,12 +65,32 @@ const TambahPenelitian = () => {
     /* 
         --- DropDown Mahasiswa ---
     */
+    const [inputValue, setInputValue] = useState<string>("");
     const [mhsData, setMhsData] = useState<TDropDown[]>([]);
 
     // Get Mhs Data to display for options
+    // useEffect(() => {
+    //     const getAllMhs = async () => {
+    //         const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/mahasiswa/getAllMahasiswa`, auth);
+    //         const data:TRespMhs = res.data;
+    //         let mhsDD = [];
+    //         for (let i = 0; i < data.count; i++) {
+    //             mhsDD.push({value: data.data[i].nim, label: data.data[i].nama_mahasiswa});
+    //         }
+    //         setMhsData(mhsDD);
+    //     }
+
+    //     getAllMhs();
+    // }, [])
+
+    const authLuar = {
+        headers: { Authorization : "91S0S6NuiA6lsGWism2h3Pn04dN4dPBH" }
+    }
+    
     useEffect(() => {
         const getAllMhs = async () => {
-            const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/mahasiswa/getAllMahasiswa`, auth);
+            console.log("api to search for name typed");
+            const res = await axios.post(`https://customapi.neosia.unhas.ac.id/getAllNimByKey?key=${inputValue}`, authLuar);
             const data:TRespMhs = res.data;
             let mhsDD = [];
             for (let i = 0; i < data.count; i++) {
@@ -79,8 +99,10 @@ const TambahPenelitian = () => {
             setMhsData(mhsDD);
         }
 
-        getAllMhs();
-    }, [])
+        if (inputValue.length >= 3) {
+            getAllMhs();
+        }
+    }, [inputValue])
     
     const [mhsFields, setMhsFields] = useState([
         {value: "", label: ""}
@@ -100,6 +122,10 @@ const TambahPenelitian = () => {
     const delMhsField = (nim: string) => {
         setMhsFields(mhsFields.filter(mhs => mhs.value !== nim));
     }
+
+    const handleInputChange = (inputValue: string) => {
+        setInputValue(inputValue);
+    }
     //----------------------------------------------------
 
     /*
@@ -118,10 +144,10 @@ const TambahPenelitian = () => {
             console.log("ax", ax);
             const data:TDataOCRScan = ax.data;
             console.log("data ocr dari api", data);
-            setJudul(data.judul_penelitian);
-            setTahun(data.tahun_penelitian);
+            setJudul(data?.judul_penelitian);
+            setTahun(data?.tahun_penelitian);
             // setKetuaPenelitian({ value: data.ketua_penelitian.nip, label: data.ketua_penelitian.nama_dosen })
-            setKetuaNip(data.ketua_penelitian.nip);
+            setKetuaNip(data?.ketua_penelitian.nip);
 
             const pdf = window.URL.createObjectURL(fileToScan);
             const object = document.querySelector("object");
@@ -148,8 +174,8 @@ const TambahPenelitian = () => {
             const res:TResp1Penelitian = ax.data;
             console.log("------", res);
             const data:TDataPenelitian = res.data;
-            setJudul(data.judul_penelitian);
-            setTahun(data.tahun_penelitian.toString());
+            setJudul(data?.judul_penelitian);
+            setTahun(data?.tahun_penelitian.toString());
             // setKetuaPenelitian({ value: data.ketua.nip, label: data.ketua.nama_dosen })
 
 
@@ -328,6 +354,7 @@ const TambahPenelitian = () => {
                                         }),
                                     }}
                                     onChange={opt => handleMhsChange(opt!.value, opt!.label, idx)}
+                                    onInputChange={handleInputChange}
                                 />
                                 <div className={styles.delPerson} onClick={() => delMhsField(input.value)}><XDel /></div>
                             </div>

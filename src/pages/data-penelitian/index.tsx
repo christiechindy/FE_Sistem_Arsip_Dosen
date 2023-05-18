@@ -90,14 +90,7 @@ const DataPenelitian = () => {
             <div className={styles.page}>
                 <div className={styles.top}>
                     <div className={styles.current_page}>List Data Penelitian</div>
-                    <Link href={{
-                        pathname: "/data-penelitian/write-data",
-                        query: {
-                            mode: "add",
-                            id: "-1"
-                        }
-                    }} className="add_btn">Tambah</Link>
-                    <div onClick={() => setShowUpFileModal(true)}>Tambah</div>
+                    <div className="add_btn" onClick={() => setShowUpFileModal(true)}>Tambah</div>
                     <div className="tooltip">Upload file penelitian</div>
                 </div>
 
