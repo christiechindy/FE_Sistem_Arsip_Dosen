@@ -96,7 +96,7 @@ const Haki = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {(count<1) ? <tr><td className={styles.noData} colSpan={role===2 ? 6 : 7}>No data</td></tr> : ""}
+                        {(count!<1) ? <tr><td className={styles.noData} colSpan={role===2 ? 6 : 7}>No data</td></tr> : ""}
                         {dataHAKI?.map((data, idx) => (
                             <tr>
                                 <td>{idx+1}</td>

@@ -3,7 +3,7 @@ import styles from "../../styles/PageContent.module.css"
 import { useState, MouseEvent, ChangeEvent, useEffect, useContext } from "react"
 import axios from "axios";
 import { useRouter } from "next/router";
-import { TData1HAKI, TDataHAKI, TResp1HAKI } from "./Types";
+import { TDataHAKI, TResp1HAKI } from "./Types";
 import { UserContext } from "@/context/UserContext";
 import { InputDropDownTunggal, InputFileField, InputTextField, InputYearField, UneditableTextField } from "@/components/InputField";
 import { TDropDown, TRespDosen } from "../CommonTypes";
@@ -34,7 +34,7 @@ const WriteData = () => {
             setJudul(data?.judul_haki); //ksh data?. nanti smua spy biar di refresh tdk error
             setTahun(data?.tahun_haki.toString());
             if (role === 1) {
-                setWhose(data.dosen?.nama!);
+                setWhose(data?.dosen?.nama!);
             }
 
             setLoading(false);

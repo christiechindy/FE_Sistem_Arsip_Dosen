@@ -38,10 +38,11 @@ const AddData = () => {
             setStartY(data?.start_year.toString());
             setEndY(data?.end_year.toString());
             setSemester(data?.semester);
-            setLoading(false);
             if (role === 1) {
-                setWhose(data.dosen?.nama);
+                setWhose(data?.dosen?.nama);
             }
+
+            setLoading(false);
         }
 
         const displayPDF = async (id: string | string[] | undefined) => {

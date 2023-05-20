@@ -107,7 +107,7 @@ const SertifikatProfesi = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {(count<1) ? <tr><td className={styles.noData} colSpan={role === 2 ? 7 : 8}>No data</td></tr> : ""}
+                        {(count!<1) ? <tr><td className={styles.noData} colSpan={role === 2 ? 7 : 8}>No data</td></tr> : ""}
                         {dataSertif?.map((data, idx) => (
                             <tr>
                                 <td>{idx+1}</td>
