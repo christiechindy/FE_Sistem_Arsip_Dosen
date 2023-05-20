@@ -23,7 +23,6 @@ export type TDosen = {
     nama: string;
     email: string | null;
     pangkat: string | null;
-    status: string;
 }
 
 export type TMhsTerlibat = {

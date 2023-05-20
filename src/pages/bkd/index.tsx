@@ -15,7 +15,7 @@ import { fileOpenHandler } from "@/utils/pdfOpen";
 import { UserContext } from "@/context/UserContext";
 
 const BKD = () => {
-    const {accessToken} = useContext(UserContext);
+    const {accessToken, role} = useContext(UserContext);
     const auth = {
         headers: { Authorization: `Bearer ${accessToken}` }
     };
@@ -97,6 +97,7 @@ const BKD = () => {
                         <thead>
                             <tr>
                                 <th>No</th>
+                                {role===1 ? <th>Nama Dosen</th> : ""}
                                 <th>Semester</th>
                                 <th>Tahun Ajaran</th>
                                 <th>File</th>
@@ -105,10 +106,11 @@ const BKD = () => {
                             </tr>
                         </thead>
                         <tbody>
-                            {(count<1) ? <tr><td className={styles.noData} colSpan={6}>No data</td></tr> : ""}
+                            {(count<1) ? <tr><td className={styles.noData} colSpan={role===2 ? 6 : 7}>No data</td></tr> : ""}
                             {dataBKD?.map((data, idx) => (
                                 <tr>
                                     <td>{idx+1}</td>
+                                    {role===1 ? <td>{data.dosen?.nama}</td> : ""}
                                     <td>{data.semester}</td>
                                     <td>{data.start_year} - {data.end_year}</td>
                                     <td><div className={styles.iconlink} onClick={() => fileOpenHandler(data.id, "/api/v1/bkd/getFileBkdById/")}>

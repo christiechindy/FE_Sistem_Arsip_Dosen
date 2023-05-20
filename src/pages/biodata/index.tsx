@@ -45,7 +45,7 @@ const Biodata = () => {
                             </div>
                             <div className={styles.field}>
                                 <label htmlFor="kampus">Nama Kampus</label>
-                                <input type="text" id="kampus" />
+                                <input type="text" id="kampus" required />
                             </div>
                             <div className={styles.field}>
                                 <div className={styles.field}>

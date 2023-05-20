@@ -8,7 +8,7 @@ import {useState, useEffect} from 'react';
 import axios from "axios";
 import { TDataBKD, TResp1BKD } from "./Types";
 import { UserContext } from "@/context/UserContext";
-import { InputDropDownField, InputDropDownTunggal, InputFileField, InputYearRangeField } from "@/components/InputField";
+import { InputDropDownField, InputDropDownTunggal, InputFileField, InputTextField, InputYearRangeField, UneditableTextField } from "@/components/InputField";
 import { TDropDown, TRespDosen } from "../CommonTypes";
 
 const AddData = () => {
@@ -22,7 +22,7 @@ const AddData = () => {
     const mode = props.mode;
     const id = props.id;
 
-    const [judul, setJudul] = useState<string>("");
+    const [whose, setWhose] = useState<string | undefined>("");
     const [startY, setStartY] = useState<string>("");
     const [endY, setEndY] = useState<string>("");
     const [semester, setSemester] = useState<string>("");
@@ -35,11 +35,13 @@ const AddData = () => {
             const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/bkd/getBkdById/${id}`, auth);
             const res:TResp1BKD = ax.data;
             const data:TDataBKD = res.data;
-            setJudul(data?.judul_bkd);
             setStartY(data?.start_year.toString());
             setEndY(data?.end_year.toString());
             setSemester(data?.semester);
             setLoading(false);
+            if (role === 1) {
+                setWhose(data.dosen?.nama);
+            }
         }
 
         const displayPDF = async (id: string | string[] | undefined) => {
@@ -76,7 +78,9 @@ const AddData = () => {
             setDosenData(dosenDD);
         }
 
-        getAllDosen();
+        if (mode === "add" && role === 1) {
+            getAllDosen();
+        }
     }, [role])
 
     const cancelHandler = (e: MouseEvent<HTMLButtonElement>) => {
@@ -87,12 +91,6 @@ const AddData = () => {
     const saveHandler = async() => {
         const formData = new FormData();
         
-        if (role === 1) { // jika admin
-            formData.append("dosen_nip", chosenNip);
-        } else { // jika dosen
-            formData.append("dosen_nip", nip);
-        }
-        formData.append("judul_bkd", judul);
         formData.append("start_year", startY);
         formData.append("end_year", endY);
         formData.append("semester", semester);
@@ -108,6 +106,11 @@ const AddData = () => {
         } 
         else { //in ADD mode
             try {
+                if (role === 1) { // jika admin
+                    formData.append("dosen_nip", chosenNip);
+                } else {
+                    formData.append("dosen_nip", nip);
+                }
                 formData.append("file_bkd", filee as any);
     
                 const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/bkd/addBkd`, formData, auth);
@@ -131,7 +134,7 @@ const AddData = () => {
                 </div>
 
                 <div className={styles.contents}>
-                    {role === 1 ? 
+                    {role === 1 && mode === "add" ? 
                         <InputDropDownTunggal
                             loading={loading}
                             label="Dosen"
@@ -139,6 +142,11 @@ const AddData = () => {
                             nip={chosenNip}
                             setNip={setChosenNip}
                         />
+                        : ""
+                    }
+
+                    {role === 1 && mode === "edit" ? 
+                        <UneditableTextField loading={loading} label="Nama Dosen" value={whose!} />
                         : ""
                     }
 

@@ -1,3 +1,5 @@
+import { TDosen } from "../CommonTypes";
+
 export type TDataSertif = {
     id: string;
     judul_sertifikat: string;
@@ -5,6 +7,7 @@ export type TDataSertif = {
     file_sertifikat: string;
     jenis_sertifikat: string;
     dosen_nip: string;
+    dosen?: TDosen;
 }
 
 export type TRespSertif = {

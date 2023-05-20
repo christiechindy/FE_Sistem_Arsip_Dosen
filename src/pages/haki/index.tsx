@@ -13,7 +13,7 @@ import { fileOpenHandler } from "@/utils/pdfOpen";
 import { UserContext } from "@/context/UserContext";
 
 const Haki = () => {
-    const {accessToken} = useContext(UserContext);
+    const {accessToken, role} = useContext(UserContext);
     const auth = {
         headers: { Authorization: `Bearer ${accessToken}` }
     };
@@ -87,6 +87,7 @@ const Haki = () => {
                     <thead>
                         <tr>
                             <th>No</th>
+                            {role===1 ? <th>Nama Dosen</th> : ""}
                             <th>Judul HAKI</th>
                             <th>Tahun</th>
                             <th>File</th>
@@ -95,10 +96,11 @@ const Haki = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {(count<1) ? <tr><td className={styles.noData} colSpan={6}>No data</td></tr> : ""}
+                        {(count<1) ? <tr><td className={styles.noData} colSpan={role===2 ? 6 : 7}>No data</td></tr> : ""}
                         {dataHAKI?.map((data, idx) => (
                             <tr>
                                 <td>{idx+1}</td>
+                                {role===1 ? <td>{data.dosen?.nama}</td> : ""}
                                 <td>{data.judul_haki}</td>
                                 <td>{data.tahun_haki}</td>
                                 <td><div className={styles.iconlink} onClick={() => fileOpenHandler(data.id, "/api/v1/haki/getFileHakiById/")}>

@@ -19,6 +19,20 @@ export const InputTextField = ({loading, label, value, setValue}: IPropsInputTex
     )
 }
 
+interface IPropsUneditableTF {
+    loading: boolean,
+    label: string,
+    value: string,
+}
+export const UneditableTextField = ({loading, label, value}: IPropsUneditableTF) => {
+    return (
+        <div className={styles.field}>
+            <label>{label}</label>
+            <input className={loading ? styles.loadingInput : ""} type="text" value={value} style={{cursor: "not-allowed"}} disabled/>
+        </div>
+    )
+}
+
 export const InputYearField = ({loading, label, value, setValue}: IPropsInputText) => {
     return (
         <div className={styles.field}>

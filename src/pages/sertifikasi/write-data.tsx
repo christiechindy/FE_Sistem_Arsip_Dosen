@@ -5,7 +5,7 @@ import { TDataSertif, TResp1Sertif } from "./Types";
 import Layout from "@/components/Layout";
 import styles from "../../styles/PageContent.module.css"
 import { UserContext } from "@/context/UserContext";
-import { InputDropDownField, InputDropDownTunggal, InputFileField, InputTextField, InputYearField } from "@/components/InputField";
+import { InputDropDownField, InputDropDownTunggal, InputFileField, InputTextField, InputYearField, UneditableTextField } from "@/components/InputField";
 import { TDropDown, TRespDosen } from "../CommonTypes";
 
 const WriteData = () => {
@@ -19,6 +19,7 @@ const WriteData = () => {
     const mode = props.mode;
     const id = props.id;
 
+    const [whose, setWhose] = useState<string>("");
     const [judul, setJudul] = useState<string>("");
     const [tahun, setTahun] = useState<string>("");
     const [jenis, setJenis] = useState<string>("");
@@ -34,6 +35,9 @@ const WriteData = () => {
             setJudul(data?.judul_sertifikat);
             setTahun(data?.tahun_sertifikat.toString());
             setJenis(data?.jenis_sertifikat);
+            if (role === 1) {
+                setWhose(data?.dosen?.nama!);
+            }
             setLoading(false);
         }
 
@@ -71,7 +75,9 @@ const WriteData = () => {
             setDosenData(dosenDD);
         }
 
-        getAllDosen();
+        if (role === 1 && mode === "add") {
+            getAllDosen();
+        }
     }, [role])
 
     const cancelHandler = (e: MouseEvent<HTMLButtonElement>) => {
@@ -81,11 +87,6 @@ const WriteData = () => {
 
     const saveHandler = async() => {
         const formData = new FormData();
-        if (role === 1) { // jika admin
-            formData.append("dosen_nip", chosenNip);
-        } else { // jika dosen
-            formData.append("dosen_nip", nip);
-        }
         formData.append("judul_sertifikat", judul);
         formData.append("tahun_sertifikat", tahun);
         formData.append("jenis_sertifikat", jenis);
@@ -100,6 +101,12 @@ const WriteData = () => {
             }
         } 
         else { //in ADD mode
+            if (role === 1) { // jika admin
+                formData.append("dosen_nip", chosenNip);
+            } else { // jika dosen
+                formData.append("dosen_nip", nip);
+            }
+
             try {
                 formData.append("file_sertifikat", filee as any);
     
@@ -126,7 +133,7 @@ const WriteData = () => {
                 </div>
 
                 <div className={styles.contents}>
-                    {role === 1 ? 
+                    {role === 1 && mode === "add" ?
                         <InputDropDownTunggal
                             loading={loading}
                             label="Dosen"
@@ -134,6 +141,11 @@ const WriteData = () => {
                             nip={chosenNip}
                             setNip={setChosenNip}
                         />
+                        : ""
+                    }
+
+                    {role === 1 && mode === "edit" ? 
+                        <UneditableTextField loading={loading} label="Nama Dosen" value={whose!} />
                         : ""
                     }
 

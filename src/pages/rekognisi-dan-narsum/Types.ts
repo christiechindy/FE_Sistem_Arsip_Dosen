@@ -1,3 +1,5 @@
+import { TDosen } from "../CommonTypes";
+
 export type TDataRekogNarsum = {
     id: string;
     judul_rekognisi_narsum: string;
@@ -5,6 +7,7 @@ export type TDataRekogNarsum = {
     jenis_rekognisi_narsum: string;
     file_rekognisi_narsum: string;
     dosen_nip: string;
+    dosen?: TDosen;
 }
 
 export type TRespRekogNarsum = {

@@ -3,9 +3,9 @@ import styles from "../../styles/PageContent.module.css"
 import { useState, MouseEvent, ChangeEvent, useEffect, useContext } from "react"
 import axios from "axios";
 import { useRouter } from "next/router";
-import { TData1HAKI, TResp1HAKI } from "./Types";
+import { TData1HAKI, TDataHAKI, TResp1HAKI } from "./Types";
 import { UserContext } from "@/context/UserContext";
-import { InputDropDownTunggal, InputFileField, InputTextField, InputYearField } from "@/components/InputField";
+import { InputDropDownTunggal, InputFileField, InputTextField, InputYearField, UneditableTextField } from "@/components/InputField";
 import { TDropDown, TRespDosen } from "../CommonTypes";
 
 const WriteData = () => {
@@ -19,6 +19,7 @@ const WriteData = () => {
     const mode = props.mode;
     const id = props.id;
     
+    const [whose, setWhose] = useState<string>("");
     const [judul, setJudul] = useState<string>("");
     const [tahun, setTahun] = useState<string>("");
     const [filee, setFilee] = useState<File | null>(null);
@@ -29,9 +30,13 @@ const WriteData = () => {
             setLoading(true);
             const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/haki/getHakiById/${id}`, auth);
             const res:TResp1HAKI = ax.data;
-            const data:TData1HAKI = res.data;
+            const data:TDataHAKI = res.data;
             setJudul(data?.judul_haki); //ksh data?. nanti smua spy biar di refresh tdk error
             setTahun(data?.tahun_haki.toString());
+            if (role === 1) {
+                setWhose(data.dosen?.nama!);
+            }
+
             setLoading(false);
         }
 
@@ -70,7 +75,9 @@ const WriteData = () => {
             setDosenData(dosenDD);
         }
 
-        getAllDosen();
+        if (mode === "add" && role === 1) {
+            getAllDosen();
+        }
     }, [role])
 
     const cancelHandler = (e: MouseEvent<HTMLButtonElement>) => {
@@ -80,11 +87,6 @@ const WriteData = () => {
 
     const saveHandler = async() => {
         const formData = new FormData();
-        if (role === 1) { // jika admin
-            formData.append("dosen_nip", chosenNip);
-        } else { // jika dosen
-            formData.append("dosen_nip", nip);
-        }
         formData.append("judul_haki", judul);
         formData.append("tahun_haki", tahun);
 
@@ -99,6 +101,11 @@ const WriteData = () => {
         } 
         else { //in ADD mode
             try {
+                if (role === 1) { // jika admin
+                    formData.append("dosen_nip", chosenNip);
+                } else { // jika dosen
+                    formData.append("dosen_nip", nip);
+                }
                 formData.append("file_haki", filee as any);
     
                 const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/haki/addHaki`, formData, auth);
@@ -122,7 +129,7 @@ const WriteData = () => {
                 </div>
 
                 <div className={styles.contents}>
-                    {role === 1 ? 
+                    {role === 1 && mode === "add" ? 
                         <InputDropDownTunggal
                             loading={loading}
                             label="Dosen"
@@ -130,6 +137,11 @@ const WriteData = () => {
                             nip={chosenNip}
                             setNip={setChosenNip}
                         />
+                        : ""
+                    }
+
+                    {role === 1 && mode === "edit" ? 
+                        <UneditableTextField loading={loading} label="Nama Dosen" value={whose!} />
                         : ""
                     }
 

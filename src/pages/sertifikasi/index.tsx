@@ -13,7 +13,7 @@ import Modal from "@/components/DeleteModal";
 import { UserContext } from "@/context/UserContext";
 
 const SertifikatProfesi = () => {
-    const {accessToken} = useContext(UserContext);
+    const {accessToken, role} = useContext(UserContext);
     const auth = {
         headers: { Authorization: `Bearer ${accessToken}` }
     };
@@ -97,6 +97,7 @@ const SertifikatProfesi = () => {
                     <thead>
                         <tr>
                             <th>No</th>
+                            {role === 1 ? <th>Nama Dosen</th> : ""}
                             <th>Judul</th>
                             <th>Tahun</th>
                             <th>Jenis</th>
@@ -106,10 +107,11 @@ const SertifikatProfesi = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {(count<1) ? <tr><td className={styles.noData} colSpan={7}>No data</td></tr> : ""}
+                        {(count<1) ? <tr><td className={styles.noData} colSpan={role === 2 ? 7 : 8}>No data</td></tr> : ""}
                         {dataSertif?.map((data, idx) => (
                             <tr>
                                 <td>{idx+1}</td>
+                                {role === 1 ? <td>{data.dosen?.nama}</td> : ""}
                                 <td>{data.judul_sertifikat}</td>
                                 <td>{data.tahun_sertifikat}</td>
                                 <td>{data.jenis_sertifikat}</td>
