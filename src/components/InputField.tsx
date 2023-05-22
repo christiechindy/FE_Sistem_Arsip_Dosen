@@ -19,6 +19,22 @@ export const InputTextField = ({loading, label, value, setValue}: IPropsInputTex
     )
 }
 
+interface IPropsInputNumber {
+    loading: boolean,
+    label: string,
+    value: number,
+    setValue: Dispatch<SetStateAction<number | undefined>>
+}
+
+export const InputNumberField = ({loading, label, value, setValue}: IPropsInputNumber) => {
+    return (
+        <div className={styles.field}>
+            <label>{label}</label>
+            <input className={loading ? styles.loadingInput : ""} type="text" value={value} onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(Number(e.target.value))} />
+        </div>
+    )
+}
+
 interface IPropsUneditableTF {
     loading: boolean,
     label: string,
@@ -42,6 +58,15 @@ export const InputYearField = ({loading, label, value, setValue}: IPropsInputTex
                     setValue(e.target.value);
                 }
             }} />
+        </div>
+    )
+}
+
+export const InputMonthYearField = ({loading, label, value, setValue}: IPropsInputText) => {
+    return (
+        <div className={styles.field}>
+            <label htmlFor="month_year">{label}</label>
+            <input className={loading ? styles.loadingInput : ""} type="month" id="month_year" value={value} onChange={(e: ChangeEvent<HTMLInputElement>) => {setValue(e.target.value)}} />
         </div>
     )
 }

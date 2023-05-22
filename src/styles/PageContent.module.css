@@ -363,3 +363,51 @@ td:last-child .iconlink:hover {
     margin-bottom: 30px;
     padding: 30px;
 } */
+
+/*---------------Generate CV-------------*/
+.cvBox {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    gap: 48px;
+
+    background: #F6F8FC;
+    border: 2px dashed #0085FF;
+    border-radius: 20px;
+    padding: 36px 50px;
+
+    transition: 0.3s ease-in-out;
+}
+
+.cvBox img {
+    width: 310px;
+    height: 310px;
+}
+
+.cvBox button {
+    background-color: var(--blueprimary);
+    color: white;
+    border: none;
+    transition: 0.3s ease-in-out;
+}
+
+.cvBox button:hover {
+    background-color: #0000e8;
+}
+
+.cvBox > div .field, .cvBox > div .field .inputtanPerOrg {
+    width: 320px;
+}
+
+.cvBox > div .field label {
+    display: block;
+    margin-bottom: 10px;
+}
+
+.cvBox > div .field {
+    margin-bottom: 20px;
+}
+
+.cvBox:hover {
+    background-color: #fbfdff;
+}

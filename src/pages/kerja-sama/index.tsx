@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import styles from "../../styles/PageContent.module.css";
 import Link from 'next/link';
 import { useContext, useEffect, useState } from "react";
-import { TDataHAKI, TRespHAKI } from "./Types";
+import { TDataKerjaSama, TRespKerjaSama } from "./Types";
 import axios from "axios";
 import FileIcon from '@/assets/FileIcon';
 import PencilIcon from "@/assets/PencilIcon";
@@ -11,33 +11,40 @@ import Loading from "@/components/Loading";
 import Modal from "@/components/DeleteModal";
 import { fileOpenHandler } from "@/utils/pdfOpen";
 import { UserContext } from "@/context/UserContext";
+import { useRouter } from "next/router";
+import { changeDateFormat } from "@/utils/dateFormat";
 
-const Haki = () => {
+const KerjaSama = () => {
     const {accessToken, role} = useContext(UserContext);
     const auth = {
         headers: { Authorization: `Bearer ${accessToken}` }
     };
 
-    const [dataHAKI, setDataHAKI] = useState<TDataHAKI[]>([]);
+    const router = useRouter();
+    if (role === 2) {
+        router.push("/home");
+    }
+
+    const [dataKerjaSama, setDataKerjaSama] = useState<TDataKerjaSama[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [count, setCount] = useState<number>();
 
     useEffect(() => {
         setLoading(true);
 
-        const getAllHAKI = async () => {
+        const getAllKerjaSama = async () => {
             try {
-                const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/haki/getAllHaki`, auth);
-                const res:TRespHAKI = ax.data;
+                const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/admin/kerja_sama/getAllKerjaSama`, auth);
+                const res:TRespKerjaSama = ax.data;
                 setCount(res.count);
-                setDataHAKI(res.data);
+                setDataKerjaSama(res.data);
                 setLoading(false);
             } catch (err) {
                 console.log(err);
             }
         }
 
-        getAllHAKI();
+        getAllKerjaSama();
     }, [])
 
     const [showDelModal, setShowDelModal] = useState<boolean>(false);
@@ -48,8 +55,8 @@ const Haki = () => {
         await axios({
             headers: auth.headers,
             method: 'post',
-            url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/haki/deleteHakiById/${id}/`
-        }).then((res) => setDataHAKI(dataHAKI?.filter(d => d.id !== id)));
+            url: `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/admin/kerja_sama/deleteKerjaSamaById/${id}/`
+        }).then((res) => setDataKerjaSama(dataKerjaSama?.filter(d => d.id !== id)));
 
         count!==undefined ? setCount(count-1) : "";
     }
@@ -72,42 +79,40 @@ const Haki = () => {
         <Layout>
             <div className={styles.page}>
                 <div className={styles.top}>
-                    <div className={styles.current_page}>List HAKI</div>
+                    <div className={styles.current_page}>List Kerja Sama</div>
                     <Link href={{
-                        pathname: "/haki/write-data",
+                        pathname: "/kerja-sama/write-data",
                         query: {
                             mode: "add",
                             id: "-1"
                         }
                     }}className="add_btn">Tambah</Link>
-                    <div className="tooltip">Upload Data HAKI</div>
+                    <div className="tooltip">Upload Data Kerja Sama</div>
                 </div>
                 {loading ? <div className={styles.loadingContainer}><Loading/></div> : "" }
                 <table className={styles.table}>
                     <thead>
                         <tr>
                             <th>No</th>
-                            {role===1 ? <th>Nama Dosen</th> : ""}
-                            <th>Judul HAKI</th>
-                            <th>Tahun</th>
+                            <th>Mitra</th>
+                            <th>Tanggal</th>
                             <th>File</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {(count!<1) ? <tr><td className={styles.noData} colSpan={role===2 ? 6 : 7}>No data</td></tr> : ""}
-                        {dataHAKI?.map((data, idx) => (
+                        {(count!<1) ? <tr><td className={styles.noData} colSpan={6}>No data</td></tr> : ""}
+                        {dataKerjaSama?.map((data, idx) => (
                             <tr>
                                 <td>{idx+1}</td>
-                                {role===1 ? <td>{data.dosen?.nama}</td> : ""}
-                                <td>{data.judul_haki}</td>
-                                <td>{data.tahun_haki}</td>
-                                <td><div className={styles.iconlink} onClick={() => fileOpenHandler(data.id, "/api/v1/haki/getFileHakiById/")}>
+                                <td>{data.mitra}</td>
+                                <td>{changeDateFormat(data.tanggal)}</td>
+                                <td><div className={styles.iconlink} onClick={() => fileOpenHandler(data.id, "/api/v1/admin/kerja_sama/getFileKerjaSamaById/")}>
                                     <FileIcon/>
                                 </div></td>
                                 <td><Link href={{
-                                    pathname: "/haki/write-data",
+                                    pathname: "/kerja-sama/write-data",
                                     query: {
                                         mode: "edit",
                                         id: data.id,
@@ -131,4 +136,4 @@ const Haki = () => {
     );
 }
 
-export default Haki;
+export default KerjaSama;
