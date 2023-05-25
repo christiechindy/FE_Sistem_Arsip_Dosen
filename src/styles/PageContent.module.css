@@ -299,7 +299,7 @@ td:last-child .iconlink:hover {
 
 /*------------Input Loading--------------*/
 .loadingInput {
-    animation: skeleton-loading 0.7s linear infinite alternate;
+    animation: skeleton-loading 0.9s linear infinite alternate;
     cursor: not-allowed;
 }
 
@@ -309,7 +309,7 @@ td:last-child .iconlink:hover {
 
 @keyframes skeleton-loading {
     0% {
-        background-color: hsl(0, 0%, 97%);
+        background-color: hsl(0, 0%, 92%);
     }
     100% {
         background-color: hsl(0, 0%, 100%);

@@ -9,12 +9,12 @@ import { UserContext } from '@/context/UserContext'
 import { InputDropDownTunggal } from '@/components/InputField'
 import { TDropDown, TRespDosen } from './CommonTypes'
 import axios from 'axios'
-import { auth } from '@/utils/token'
+import { auth, getToken } from '@/utils/token'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
-    const {role} = useContext(UserContext);
+    const {role, nip} = useContext(UserContext);
 
     const [loading, setLoading] = useState<boolean>(false);
     /* getALlDosen -> admin pilih dosen yang mau diinputkan datanya */
@@ -37,6 +37,32 @@ export default function Home() {
             getAllDosen();
         }
     }, [role])
+
+    const generateCV = async () => {
+        const formData = new FormData();
+        if (role === 2) {
+            formData.append("nip", nip);
+        } else {
+            formData.append("nip", chosenNip);
+        }
+
+        await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/cv/generate`, formData, {
+            headers: {Authorization: `Bearer ${getToken()}`},
+            responseType: 'blob'
+        })
+        .then((res) => res.data)
+        .then((blob) => {
+            const url = window.URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.setAttribute('download', 'cv.docx');
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            // window.open(url);
+        })
+        .catch(err => console.log(err))
+    }
 
     return (
         <>
@@ -64,7 +90,7 @@ export default function Home() {
                                         setNip={setChosenNip} /> 
                                     : ""
                                 }
-                                <button>Generate CV</button>
+                                <button onClick={generateCV}>Generate CV</button>
                             </div>
                         </div>
                     </div>

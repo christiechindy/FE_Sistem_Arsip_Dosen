@@ -73,7 +73,8 @@ const TambahPenelitian = () => {
             const formData = new FormData();
             formData.append("typed", inputValue);
             console.log("api to search for name typed");
-            const res = await axios.post("http://localhost:133/search-mahasiswa", formData);
+            console.log("envvvvvvvvvvvvvvvvvvvvvv", process.env.NEXT_PUBLIC_PYTHON);
+            const res = await axios.post(`${process.env.NEXT_PUBLIC_PYTHON}/search-mahasiswa`, formData);
             const data:TMhsPy[] = res.data;
             let mhsDD = [];
             for (let i = 0; i < data.length; i++) {
@@ -123,13 +124,13 @@ const TambahPenelitian = () => {
             setLoading(true);
             const formData = new FormData();
             formData.append("filee", fileToScan);
-            const ax = await axios.post("http://localhost:133/scan-penelitian", formData);
+            const ax = await axios.post(`${process.env.NEXT_PUBLIC_PYTHON}/scan-pdf`, formData);
             console.log("ax", ax);
             const data:TDataOCRScan = ax.data;
             console.log("data ocr dari api", data);
-            setJudul(data?.judul_penelitian);
-            setTahun(data?.tahun_penelitian);
-            setKetuaNip(data?.ketua_penelitian.nip);
+            setJudul(data?.judul);
+            setTahun(data?.tahun);
+            setKetuaNip(data?.ketua.nip);
 
             const pdf = window.URL.createObjectURL(fileToScan);
             const object = document.querySelector("object");
@@ -171,7 +172,7 @@ const TambahPenelitian = () => {
 
             let mhs = [];
             for (let i = 0; i < data?.mahasiswa.length; i++) {
-                mhs.push({value: data.mahasiswa[i].nim, label: data.mahasiswa[i].nama});
+                mhs.push({value: data.mahasiswa[i].nim, label: data.mahasiswa[i].first_name});
             }
             setMhsFields(mhs);
 
@@ -219,13 +220,14 @@ const TambahPenelitian = () => {
             let key = `dosen_nip[${i}]`;
             formData.append(key, dosenFields[i].value);
         }
+        console.log("`````````````mhs fields`````````````", mhsFields);
         for (let i = 0; i < mhsFields.length; i++) {
             let key = `mahasiswa_nim[${i}]`;
             formData.append(key, mhsFields[i].value);
 
             const formDataMhs = new FormData();
             formDataMhs.append("nim", mhsFields[i].value);
-            formDataMhs.append("nama", mhsFields[i].label);
+            formDataMhs.append("first_name", mhsFields[i].label);
             await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/mahasiswa/addMahasiswa`, formDataMhs, auth);
         }
 

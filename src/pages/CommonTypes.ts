@@ -23,12 +23,15 @@ export type TDosen = {
     nama: string;
     email: string | null;
     pangkat: string | null;
+    status: string;
 }
 
 export type TMhsTerlibat = {
     id: string;
     nim: string;
-    nama: string;
+    first_name: string;
+    last_name: string;
+    email: string;
 }
 
 export type TDosenPy = {

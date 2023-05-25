@@ -1,7 +1,41 @@
 import Layout from "@/components/Layout";
-import styles from "../../styles/Biodata.module.css";
+import styles from "../../styles/PageContent.module.css";
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "@/context/UserContext";
+import { InputTextField, UneditableTextField } from "@/components/InputField";
+import axios from "axios";
+import { TRespBiodata } from "./Types";
 
 const Biodata = () => {
+    const {nip, accessToken} = useContext(UserContext);
+    const auth = {
+        headers: { Authorization: `Bearer ${accessToken}` }
+    };
+
+    const [loading, setLoading] = useState<boolean>(false);
+    const [nama, setNama] = useState<string>("");
+    const [email, setEmail] = useState<string>("");
+    const [pangkat, setPangkat] = useState<string>("");
+
+    useEffect(() => {
+        const getBiodata = async () => {
+            setLoading(true);
+            const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/dosen/getDosenByNIP/${nip}`, auth);
+            const res:TRespBiodata = ax.data;
+            const data = res.data;
+            setNama(data?.nama);
+            setEmail(data?.email || "");
+            setPangkat(data?.pangkat || "");
+            setLoading(false);
+        }
+
+        getBiodata();
+    }, [])
+
+    const saveHandler = () => {
+
+    }
+
     return (
         <Layout>
             <div className={styles.page}>
@@ -9,63 +43,19 @@ const Biodata = () => {
                     <div className={styles.current_page}>
                         Biodata
                     </div>
-                    <button className={styles.sister}>Sinkronisasi Sister</button>
                 </div>
                 <div className={styles.contents}>
-                    <div className={styles.field}>
-                        <label htmlFor="nama">Nama Lengkap</label>
-                        <input type="text" id="nama" />
-                    </div>
-                    <div className={styles.field}>
-                        <label htmlFor="tgl_lahir">Tanggal Lahir</label>
-                        <input type="date" id="tgl_lahir" />
-                    </div>
-                    <div className={styles.field}>
-                        <label htmlFor="nip">NIP</label>
-                        <input type="text" id="nip" />
-                    </div>
-                    <div className={styles.field}>
-                        <label htmlFor="pangkat">Pangkat / Golongan</label>
-                        <input type="text" id="pangkat" />
-                    </div>
-                    <div className={styles.field}>
-                        <label htmlFor="email">Email</label>
-                        <input type="email" id="email" />
-                    </div>
-                    <div className={styles.field}>
-                        <label htmlFor="pendidikan">Riwayat Pendidikan</label>
-                        <div className={styles.box_riwayat} id="pendidikan">
-                            <div className={styles.field}>
-                                <label htmlFor="S...">Sarjana</label>
-                                <select name="sarjana" id="S...">
-                                    <option value="S1">S1</option>
-                                    <option value="S2">S2</option>
-                                    <option value="S3">S3</option>
-                                </select>
-                            </div>
-                            <div className={styles.field}>
-                                <label htmlFor="kampus">Nama Kampus</label>
-                                <input type="text" id="kampus" required />
-                            </div>
-                            <div className={styles.field}>
-                                <div className={styles.field}>
-                                    <label htmlFor="fakultas">Fakultas</label>
-                                    <input type="text" id="fakultas" />
-                                </div>
-                                <div className={styles.field}>
-                                    <label htmlFor="prodi">Program Studi</label>
-                                    <input type="text" id="prodi" />
-                                </div>
-                            </div>
-                            <div className={styles.field}>
-                                <label htmlFor="tahun">Tahun Kelulusan</label>
-                                <input type="number" id="tahun" />
-                            </div>
-                            <div className={styles.field}>
-                                <label htmlFor="ijazah">Ijazah</label>
-                                <input type="file" id="ijazah" />
-                            </div>
-                        </div>
+                    <UneditableTextField loading={loading} label="
+                    NIP" value={nip} />
+
+                    <UneditableTextField loading={loading} label="Nama" value={nama} />
+
+                    <InputTextField loading={loading} label="Email" value={email} setValue={setEmail} />
+
+                    <InputTextField loading={loading} label="Pangkat" value={pangkat} setValue={setPangkat} />
+
+                    <div className={styles.action_btn}>
+                        <button className={styles.save} onClick={saveHandler}>Save</button>
                     </div>
                 </div>
             </div>

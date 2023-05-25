@@ -43,9 +43,16 @@ const menu:ILink[] = [
         text: "BKD"
     },
     {
+        href: "/riwayat-pendidikan",
+        text: "Riwayat Pendidikan"
+    }
+]
+
+const menuKhususDosen: ILink[] = [
+    {
         href: "/biodata",
         text: "Biodata"
-    }
+    },
 ]
 
 const menuKhususAdmin:ILink[] = [
@@ -73,6 +80,11 @@ export const Sidebar = () => {
                 {menu.map((link: ILink, index: number) => (
                     <Link href={link.href} className={router.pathname.startsWith(link.href) ? styles.active : ""} key={index}>{link.text}</Link>
                 ))}
+                {role === 2 ?
+                    menuKhususDosen.map((link: ILink, index: number) => (
+                        <Link href={link.href} className={router.pathname.startsWith(link.href) ? styles.active : ""} key={index}>{link.text}</Link>
+                    )) : ""
+                }
                 {role === 1 ? 
                     menuKhususAdmin.map((link: ILink, index: number) => (
                         <Link href={link.href} className={router.pathname.startsWith(link.href) ? styles.active : ""} key={index}>{link.text}</Link>

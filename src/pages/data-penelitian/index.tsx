@@ -29,6 +29,7 @@ const DataPenelitian = () => {
 
         const getDataPenelitian = async () => {
             try {
+                console.log("envvvvvvvvvvvv", process.env.NEXT_PUBLIC_PYTHON);
                 const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/getAllPenelitian`, auth);
                 const res:TRespPenelitian = ax.data;
                 setCount(res?.count);
@@ -93,7 +94,7 @@ const DataPenelitian = () => {
 
                 {loading ? <div className={styles.loadingContainer}><Loading /></div> : "" }
 
-                {showUpFileModal ? <UpFileModal showUpFileModal={showUpFileModal} setShowUpFileModal={setShowUpFileModal} /> : ""}
+                {showUpFileModal ? <UpFileModal setShowUpFileModal={setShowUpFileModal} currentPage="/data-penelitian" /> : ""}
 
                 <table className={styles.table}>
                     <thead>
@@ -109,14 +110,14 @@ const DataPenelitian = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {(count<1) ? <tr><td className={styles.noData} colSpan={8}>No data</td></tr> : ""}
+                        {(count!<1) ? <tr><td className={styles.noData} colSpan={8}>No data</td></tr> : ""}
                         {dataPenelitian?.map((data, idx) => (
                             <tr>
                                 <td>{idx+1}</td>
                                 <td>{data.judul_penelitian}</td>
                                 <td>{data.tahun_penelitian}</td>
                                 <td>{data.dosen.map(dsn => <p>{dsn.nama + (data.dosen[data.dosen.length-1].nip!==dsn.nip ? "\n" : "")}</p>)}</td>
-                                <td>{data.mahasiswa.map(mhs => <p>{mhs.nama + (data.mahasiswa[data.mahasiswa.length-1].nim!==mhs.nim ? "; \n" : "")}</p> )}</td>
+                                <td>{data.mahasiswa.map(mhs => <p>{mhs.first_name + (data.mahasiswa[data.mahasiswa.length-1].nim!==mhs.nim ? "; \n" : "")}</p> )}</td>
                                 <td><div className={styles.iconlink} onClick={() => fileOpenHandler(data.id, "/api/v1/penelitian/getFilePenelitianById/")}>
                                     <FileIcon />
                                 </div></td>

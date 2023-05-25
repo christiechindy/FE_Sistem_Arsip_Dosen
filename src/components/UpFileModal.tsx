@@ -5,11 +5,11 @@ import { useContext } from "react";
 import { FileContext } from "@/context/FileContext";
 
 interface IProps {
-    showUpFileModal: boolean;
-    setShowUpFileModal: React.Dispatch<React.SetStateAction<boolean>>
+    setShowUpFileModal: React.Dispatch<React.SetStateAction<boolean>>,
+    currentPage: string,
 }
 
-const UpFileModal = ({showUpFileModal, setShowUpFileModal}: IProps) => {
+const UpFileModal = ({setShowUpFileModal, currentPage}: IProps) => {
     const [bgClicked, setBgClicked] = useState<boolean>(false);
     const [boxClicked, setBoxClicked] = useState<boolean>(false);
 
@@ -35,7 +35,7 @@ const UpFileModal = ({showUpFileModal, setShowUpFileModal}: IProps) => {
                         setFileToScan(e.target.files[0])
                     }} />
                     <Link className={styles.scanBtn} href={{
-                        pathname: "/data-penelitian/write-data",
+                        pathname: `${currentPage}/write-data`,
                         query: {
                             mode: "add",
                             id: "-1"
