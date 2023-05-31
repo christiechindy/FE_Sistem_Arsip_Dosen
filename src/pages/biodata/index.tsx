@@ -5,6 +5,10 @@ import { UserContext } from "@/context/UserContext";
 import { InputTextField, UneditableTextField } from "@/components/InputField";
 import axios from "axios";
 import { TRespBiodata } from "./Types";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { useRouter } from "next/router";
+import { TError } from "../CommonTypes";
 
 const Biodata = () => {
     const {nip, accessToken} = useContext(UserContext);
@@ -32,8 +36,23 @@ const Biodata = () => {
         getBiodata();
     }, [])
 
-    const saveHandler = () => {
+    const router = useRouter();
 
+    const saveHandler = async () => {
+        try {
+            const formData = new FormData();
+            formData.append("email", email);
+            formData.append("pangkat", pangkat || "-");
+    
+            toast("Please wait");
+            await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/dosen/updateDosenByNIP/${nip}`, formData, auth);
+            router.back();
+        } catch (err) {
+            const error = err as TError;
+            if (error.response.data.status !== "OK") {
+                toast.error(error.response.data.status +" "+ JSON.stringify(error.response.data.message))
+            }
+        }
     }
 
     return (
@@ -58,6 +77,7 @@ const Biodata = () => {
                         <button className={styles.save} onClick={saveHandler}>Save</button>
                     </div>
                 </div>
+                <ToastContainer position="bottom-right" />
             </div>
         </Layout>
     );

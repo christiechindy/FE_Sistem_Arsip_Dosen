@@ -1,19 +1,16 @@
-"use client";
-
 import Layout from "@/components/Layout"
 import styles from "../../styles/PageContent.module.css"
-import { useRouter } from 'next/router';
-import { ChangeEvent, MouseEvent, useContext } from "react";
-import {useState, useEffect} from 'react';
+import { useState, MouseEvent, ChangeEvent, useEffect, useContext } from "react"
 import axios from "axios";
-import { TDataBKD, TResp1BKD } from "./Types";
+import { useRouter } from "next/router";
+import { TDataRipen, TResp1DataRipen } from "./Types";
 import { UserContext } from "@/context/UserContext";
-import { InputDropDownField, InputDropDownTunggal, InputFileField, InputTextField, InputYearRangeField, UneditableTextField } from "@/components/InputField";
+import { InputDataList, InputDropDownTunggal, InputFileField, InputTextField, InputYearField, UneditableTextField } from "@/components/InputField";
 import { TDropDown, TError, TRespDosen } from "../CommonTypes";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-const AddData = () => {
+const WriteData = () => {
     const {accessToken, nip, role} = useContext(UserContext);
     const auth = {
         headers: { Authorization: `Bearer ${accessToken}` }
@@ -23,32 +20,39 @@ const AddData = () => {
     const props = router.query;
     const mode = props.mode;
     const id = props.id;
-
-    const [whose, setWhose] = useState<string | undefined>("");
-    const [startY, setStartY] = useState<string>("");
-    const [endY, setEndY] = useState<string>("");
-    const [semester, setSemester] = useState<string>("");
+    
+    const [whose, setWhose] = useState<string>("");
+    const [sarjana, setSarjana] = useState<string>("");
+    const [kampus, setKampus] = useState<string>("");
+    const [lokasi, setLokasi] = useState<string>("");
+    const [fakultas, setFakultas] = useState<string>("");
+    const [prodi, setProdi] = useState<string>("");
+    const [tahunLulus, setTahunLulus] = useState<string>("");
     const [filee, setFilee] = useState<File | null>(null);
     const [loading, setLoading] = useState<boolean>(false);
 
     useEffect(() => {
-        const getBKDData = async(id : string | string[] | undefined) => {
+        const getRipenData = async (id: string | string[] | undefined) => {
             setLoading(true);
-            const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/bkd/getBkdById/${id}`, auth);
-            const res:TResp1BKD = ax.data;
-            const data:TDataBKD = res.data;
-            setStartY(data?.start_year.toString());
-            setEndY(data?.end_year.toString());
-            setSemester(data?.semester);
-            if (role === 1) {
-                setWhose(data?.dosen?.nama);
-            }
+            const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/riwayat_pendidikan/getRiwayatPendidikanById/${id}`, auth);
+            const res:TResp1DataRipen = ax.data;
+            const data:TDataRipen = res.data;
+            
+            setSarjana(data?.sarjana);
+            setKampus(data?.kampus);
+            setLokasi(data?.lokasi);
+            setFakultas(data?.fakultas || "");
+            setProdi(data?.prodi || "");
+            setTahunLulus(data?.tahun_lulus.toString());
+            // if (role === 1) {
+            //     setWhose(data?.dosen?.nama!);
+            // }
 
             setLoading(false);
         }
 
         const displayPDF = async (id: string | string[] | undefined) => {
-            axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/bkd/getFileBkdById/${id}`, {
+            axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/riwayat_pendidikan/getFileRiwayatPendidikanById/${id}`, {
                 headers: auth.headers,
                 responseType: 'blob'
             })
@@ -62,7 +66,7 @@ const AddData = () => {
         }
 
         if (id !== "-1") {
-            getBKDData(id);
+            getRipenData(id);
             displayPDF(id);
         }
     }, [id])
@@ -73,7 +77,7 @@ const AddData = () => {
     useEffect(() => {
         const getAllDosen = async () => {
             const res = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/dosen/getAllDosen`, auth);
-            const data:TRespDosen = res.data;
+            const data:TRespDosen = res?.data;
             let dosenDD = [];
             for (let i = 0; i < data.count; i++) {
                 dosenDD.push({value: data.data[i].nip, label: data.data[i].nama});
@@ -88,20 +92,22 @@ const AddData = () => {
 
     const cancelHandler = (e: MouseEvent<HTMLButtonElement>) => {
         e.preventDefault();
-        router.push("/bkd");
+        router.back();
     }
 
     const saveHandler = async() => {
         const formData = new FormData();
-        
-        formData.append("start_year", startY);
-        formData.append("end_year", endY);
-        formData.append("semester", semester);
+        formData.append("sarjana", sarjana);
+        formData.append("kampus", kampus);
+        formData.append("lokasi", lokasi);
+        formData.append("fakultas", fakultas);
+        formData.append("prodi", prodi);
+        formData.append("tahun_lulus", tahunLulus);
 
         if (id !== "-1") { //in EDIT mode
             try {
                 toast("Please wait");
-                await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/bkd/updateBkdById/${id}`, formData, auth);
+                await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/riwayat_pendidikan/updateRiwayatPendidikanById/${id}`, formData, auth);
                 router.back();
             } catch(err) {
                 const error = err as TError;
@@ -114,13 +120,13 @@ const AddData = () => {
             try {
                 if (role === 1) { // jika admin
                     formData.append("dosen_nip", chosenNip);
-                } else {
+                } else { // jika dosen
                     formData.append("dosen_nip", nip);
                 }
-                formData.append("file_bkd", filee as any);
-                
+                formData.append("file_ijazah", filee as any);
+    
                 toast("Please wait");
-                await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/bkd/addBkd`, formData, auth);
+                await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/riwayat_pendidikan/addRiwayatPendidikan`, formData, auth);
                 router.back();
             } catch (err) {
                 const error = err as TError;
@@ -134,11 +140,15 @@ const AddData = () => {
     // state for the explanation tooltip for file
     const [explVis, setExplVis] = useState<boolean>(false);
 
+    useEffect(() => {
+        console.log("sarjana berubah jadi", sarjana);
+    }, [sarjana])
+
     return (
         <Layout>
             <div className={styles.page}>
                 <div className={styles.top}>
-                    <div className={styles.current_page}>{mode==="edit" ? "Edit" : "Tambah"} BKD</div>
+                    <div className={styles.current_page}>{mode==="edit" ? "Edit" : "Tambah"} Riwayat Pendidikan</div>
                 </div>
 
                 <div className={styles.contents}>
@@ -158,24 +168,25 @@ const AddData = () => {
                         : ""
                     }
 
-                    <InputDropDownField loading={loading} label="Semester" value={semester} setValue={setSemester} options={[
-                        {value: "Genap", label: "Genap"},
-                        {value: "Ganjil", label: "Ganjil"},
-                    ]} />
+                    <InputDataList loading={loading} label="Sarjana" value={sarjana} setValue={setSarjana} />
 
-                    <InputYearRangeField loading={loading} label="Tahun Ajaran" start={startY} setStart={setStartY} end={endY} setEnd={setEndY} />
+                    <InputTextField loading={loading} label="Kampus" value={kampus} setValue={setKampus} />
 
-                    {mode==="edit" ?
+                    <InputTextField loading={loading} label="Lokasi Kampus" value={lokasi} setValue={setLokasi} />
+
+                    <InputTextField loading={loading} label="Fakultas" value={fakultas} setValue={setFakultas} />
+
+                    <InputTextField loading={loading} label="Program Studi" value={prodi} setValue={setProdi} />
+
+                    <InputYearField loading={loading} label="Tahun Lulus" value={tahunLulus} setValue={setTahunLulus} />
+
+                    {mode==="edit" ? 
                         <div className={styles.field}>
                             <div className={styles.pdfTop}>
                                 <label>File</label>
                                 <div className={explVis ? styles.explVis : styles.explHid}>Jika file salah upload, hapuslah data ini dan silahkan mengupload ulang</div>
                             </div>
-                            {(loading) ? 
-                                <input style={{height: "300px"}} className={loading ? styles.loadingInput : ""} type="text" /> 
-                                : 
-                                <object className={styles.object} data="" width="100%" height="400px" onMouseOver={() => setExplVis(true)} onMouseLeave={() => setExplVis(false)} />
-                            }
+                            {(loading) ? <input style={{height: "300px"}} className={styles.loadingInput} type="text" /> : <object className={styles.object} data="" width="100%" height="400px" onMouseOver={() => setExplVis(true)} onMouseLeave={() => setExplVis(false)} />}
                         </div>
                         :
                         <InputFileField label="File" setValue={setFilee} />
@@ -192,4 +203,4 @@ const AddData = () => {
     )
 }
 
-export default AddData
+export default WriteData

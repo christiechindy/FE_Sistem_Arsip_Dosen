@@ -19,6 +19,20 @@ export const InputTextField = ({loading, label, value, setValue}: IPropsInputTex
     )
 }
 
+export const InputDataList = ({loading, label, value, setValue}: IPropsInputText) => {
+    return (
+        <div className={styles.field}>
+            <label>{label}</label>
+            <input className={loading ? styles.loadingInput : ""}  type="text" list="sarjana" value={value} onChange={(e) => setValue(e.target.value)} onFocus={() => setValue("")}/>
+            <datalist id="sarjana">
+                <option value="S1">S1</option>
+                <option value="S2">S2</option>
+                <option value="S3">S3</option>
+            </datalist>
+        </div>
+    );
+}
+
 interface IPropsInputNumber {
     loading: boolean,
     label: string,
@@ -179,16 +193,17 @@ export const InputDropDownMahasiswa = ({loading, mhsFields, mhsData, handleMhsCh
 
 interface IPropsInputDDPeneliti {
     loading: boolean,
+    label: string,
     dosenFields: IOption[],
     dosenData: IOption[],
     handleDosenChange(nip: string, nama_dosen: string, idx: number): void,
     delDosenField(nip: string): void
 }
 
-export const InputDropDownDosen = ({loading, dosenFields, dosenData, handleDosenChange, delDosenField}: IPropsInputDDPeneliti) => {
+export const InputDropDownDosen = ({loading, label, dosenFields, dosenData, handleDosenChange, delDosenField}: IPropsInputDDPeneliti) => {
     return (
         <div className={styles.field}>
-            <label>Dosen Anggota Peneliti</label>
+            <label>{label}</label>
             {loading ? <input type="text" className={styles.loadingInput} style={{marginBottom: "7px"}} /> : dosenFields.map((input, idx) => (
                 <div className={styles.inputtanPerOrg}>
                     <Select 

@@ -1,3 +1,5 @@
+import { AxiosHeaders } from "axios";
+
 export type TDropDown = {
     value: string;
     label: string
@@ -42,4 +44,24 @@ export type TDosenPy = {
 export type TMhsPy = {
     nama_mahasiswa: string;
     nim: string;
+}
+
+export type TError = {
+    code: string;
+    config: any;
+    message: string;
+    name: string;
+    request: XMLHttpRequest;
+    response: {
+        config: any;
+        data: {
+            status: string;
+            code: number;
+            message: any;
+        };
+        headers: AxiosHeaders;
+        request: XMLHttpRequest;
+        status: number;
+        statusText: string;
+    }
 }

@@ -171,3 +171,10 @@ input::-webkit-inner-spin-button {
 input[type=number] {
     -moz-appearance: textfield;
 }
+
+.Toastify .Toastify__toast-body {
+    font-family: "Readex Pro";
+    font-size: 14px;
+    line-height: 22px;
+    color: #000;
+}

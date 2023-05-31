@@ -29,7 +29,6 @@ const DataPenelitian = () => {
 
         const getDataPenelitian = async () => {
             try {
-                console.log("envvvvvvvvvvvv", process.env.NEXT_PUBLIC_PYTHON);
                 const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/getAllPenelitian`, auth);
                 const res:TRespPenelitian = ax.data;
                 setCount(res?.count);

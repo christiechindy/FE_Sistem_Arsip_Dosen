@@ -3,12 +3,13 @@ import styles from "../../styles/PageContent.module.css"
 import { useState, MouseEvent, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { TDataOCRScan, TDataPengabdian, TResp1Pengabdian } from './Types';
-import { TDropDown, TMhsPy, TRespDosen } from "../CommonTypes";
-import axios from 'axios';
+import { TDropDown, TError, TMhsPy, TRespDosen } from "../CommonTypes";
+import axios, { AxiosError } from 'axios';
 import { auth, getToken } from "@/utils/token";
 import { FileContext } from "@/context/FileContext";
 import { InputDropDownDosen, InputDropDownTunggal, InputDropDownMahasiswa, InputTextField, InputYearField } from "@/components/InputField";
 import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const TambahPengabdian = () => {
     const router = useRouter();
@@ -232,23 +233,27 @@ const TambahPengabdian = () => {
 
         if (id !== "-1") { // in EDIT mode
             try {
+                toast("Please wait");
                 await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/pengabdian/updatePengabdianById/${id}`, formData, auth);
-            } catch (err) {
-                console.log(err);
-            } finally {
                 router.back();
+            } catch(err) {
+                const error = err as TError;
+                if (error.response.data.status !== "OK") {
+                    toast.error(error.response.data.status +" "+ JSON.stringify(error.response.data.message))
+                }
             }
         }
         else { // in ADD mode
             try { 
                 formData.append("file_pengabdian", fileToScan as any);
-
-                const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/pengabdian/addPengabdian`, formData, auth);
-                console.log(res);
-            } catch (err) {
-                console.log(err);
-            } finally {
+                toast("Please wait");
+                await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/pengabdian/addPengabdian`, formData, auth);
                 router.back();
+            } catch (err) {
+                const error = err as TError;
+                if (error.response.data.status !== "OK") {
+                    toast.error(error.response.data.status +" "+ JSON.stringify(error.response.data.message))
+                }
             }
         }
     }
@@ -281,6 +286,7 @@ const TambahPengabdian = () => {
 
                     <InputDropDownDosen 
                         loading={loading} 
+                        label="Dosen Anggota Pengabdi"
                         dosenFields={dosenFields} 
                         dosenData={dosenData}
                         handleDosenChange={handleDosenChange}
@@ -322,7 +328,7 @@ const TambahPengabdian = () => {
                         <button className={styles.save} onClick={saveHandler}>Save</button>
                     </div>
                 </div>
-                <ToastContainer />
+                <ToastContainer position="bottom-right" />
             </div>
         </Layout>
     )

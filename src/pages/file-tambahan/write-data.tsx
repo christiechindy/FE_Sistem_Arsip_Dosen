@@ -6,7 +6,9 @@ import { useRouter } from "next/router";
 import { TDataTambahan, TResp1DataTambahan } from "./Types";
 import { UserContext } from "@/context/UserContext";
 import { InputDropDownTunggal, InputFileField, InputTextField, InputYearField, UneditableTextField } from "@/components/InputField";
-import { TDropDown, TRespDosen } from "../CommonTypes";
+import { TDropDown, TError, TRespDosen } from "../CommonTypes";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const WriteData = () => {
     const {accessToken, nip, role} = useContext(UserContext);
@@ -76,23 +78,28 @@ const WriteData = () => {
 
         if (id !== "-1") { //in EDIT mode
             try {
+                toast("Please wait");
                 await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/admin/file_tambahan/updateFileTambahanById/${id}`, formData, auth);
-            } catch(err) {
-                console.log(err);
-            } finally {
                 router.back();
+            } catch(err) {
+                const error = err as TError;
+                if (error.response.data.status !== "OK") {
+                    toast.error(error.response.data.status +" "+ JSON.stringify(error.response.data.message))
+                }
             }
         } 
         else { //in ADD mode
             try {
                 formData.append("file", filee as any);
     
+                toast("Please wait");
                 const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/admin/file_tambahan/addFileTambahan`, formData, auth);
-                console.log(res);
-            } catch (err) {
-                console.log(err);
-            } finally {
                 router.back();
+            } catch (err) {
+                const error = err as TError;
+                if (error.response.data.status !== "OK") {
+                    toast.error(error.response.data.status +" "+ JSON.stringify(error.response.data.message))
+                }
             }
         }        
     }
@@ -131,6 +138,7 @@ const WriteData = () => {
                         <button className={styles.save} onClick={saveHandler}>Save</button>
                     </div>
                 </div>
+                <ToastContainer position="bottom-right" />
             </div>
         </Layout>
     )
