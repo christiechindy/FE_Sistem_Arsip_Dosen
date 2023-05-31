@@ -107,8 +107,12 @@ const WriteData = () => {
         if (id !== "-1") { //in EDIT mode
             try {
                 toast("Please wait");
-                await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/riwayat_pendidikan/updateRiwayatPendidikanById/${id}`, formData, auth);
-                router.back();
+                const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/riwayat_pendidikan/updateRiwayatPendidikanById/${id}`, formData, auth);
+                if (res.data.status !== "OK") {
+                    toast.error(res.data.status +" "+ JSON.stringify(res.data.message))
+                } else {
+                    router.back();
+                }
             } catch(err) {
                 const error = err as TError;
                 if (error.response.data.status !== "OK") {
@@ -126,8 +130,12 @@ const WriteData = () => {
                 formData.append("file_ijazah", filee as any);
     
                 toast("Please wait");
-                await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/riwayat_pendidikan/addRiwayatPendidikan`, formData, auth);
-                router.back();
+                const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/riwayat_pendidikan/addRiwayatPendidikan`, formData, auth);
+                if (res.data.status !== "OK") {
+                    toast.error(res.data.status +" "+ JSON.stringify(res.data.message))
+                } else {
+                    router.back();
+                }
             } catch (err) {
                 const error = err as TError;
                 if (error.response.data.status !== "OK") {
@@ -189,7 +197,7 @@ const WriteData = () => {
                             {(loading) ? <input style={{height: "300px"}} className={styles.loadingInput} type="text" /> : <object className={styles.object} data="" width="100%" height="400px" onMouseOver={() => setExplVis(true)} onMouseLeave={() => setExplVis(false)} />}
                         </div>
                         :
-                        <InputFileField label="File" setValue={setFilee} />
+                        <InputFileField label="Ijazah" setValue={setFilee} />
                     }
 
                     <div className={styles.action_btn}>

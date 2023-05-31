@@ -98,8 +98,12 @@ const WriteData = () => {
         if (id !== "-1") { //in EDIT mode
             try {
                 toast("Please wait");
-                await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/artikel_ilmiah/updateArtikelIlmiahById/${id}`, formData, auth);
-                router.back();
+                const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/artikel_ilmiah/updateArtikelIlmiahById/${id}`, formData, auth);
+                if (res.data.status !== "OK") {
+                    toast.error(res.data.status +" "+ JSON.stringify(res.data.message))
+                } else {
+                    router.back();
+                }
             } catch(err) {
                 const error = err as TError;
                 if (error.response.data.status !== "OK") {
@@ -119,7 +123,11 @@ const WriteData = () => {
                 toast("Please wait");
                 const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/artikel_ilmiah/addArtikelIlmiah`, formData, auth);
                 console.log(res);
-                router.back();
+                if (res.data.status !== "OK") {
+                    toast.error(res.data.status +" "+ JSON.stringify(res.data.message))
+                } else {
+                    router.back();
+                }
             } catch (err) {
                 const error = err as TError;
                 if (error.response.data.status !== "OK") {

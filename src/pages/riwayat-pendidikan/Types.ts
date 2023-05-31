@@ -1,3 +1,5 @@
+import { TDosen } from "../CommonTypes";
+
 export type TDataRipen = {
     id: string;
     sarjana: string;
@@ -8,6 +10,7 @@ export type TDataRipen = {
     tahun_lulus: number;
     file_ijazah: string;
     dosen_nip: string;
+    dosen: TDosen;
 }
 
 export type TRespDataRipen = {

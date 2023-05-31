@@ -116,7 +116,7 @@ const DataPengabdian = () => {
                                 <td>{data.judul_pengabdian}</td>
                                 <td>{data.tahun_pengabdian}</td>
                                 <td>{data.dosen.map(dsn => <p>{dsn.nama + (data.dosen[data.dosen.length-1].nip!==dsn.nip ? "\n" : "")}</p>)}</td>
-                                <td>{data.mahasiswa.map(mhs => <p>{mhs.first_name + (data.mahasiswa[data.mahasiswa.length-1].nim!==mhs.nim ? "; \n" : "")}</p> )}</td>
+                                <td className={styles.mhsNameTable}>{data.mahasiswa.map(mhs => <p>{mhs.first_name + (data.mahasiswa[data.mahasiswa.length-1].nim!==mhs.nim ? "; \n" : "")}</p> )}</td>
                                 <td><div className={styles.iconlink} onClick={() => fileOpenHandler(data.id, "/api/v1/pengabdian/getFilePengabdianById/")}>
                                     <FileIcon />
                                 </div></td>

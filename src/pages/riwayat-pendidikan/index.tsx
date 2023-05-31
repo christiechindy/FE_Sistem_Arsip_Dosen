@@ -102,7 +102,7 @@ const Ripen = () => {
                         {dataRipen?.map((data, idx) => (
                             <tr>
                                 <td>{idx+1}</td>
-                                {role===1 ? <td>Nama Dosen nyaaa</td> : ""}
+                                {role===1 ? <td>{data?.dosen.nama}</td> : ""}
                                 <td>{data?.sarjana}</td>
                                 <td>{data?.kampus}</td>
                                 <td>{data?.prodi}</td>

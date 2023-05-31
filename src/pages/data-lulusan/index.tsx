@@ -91,8 +91,8 @@ const DataLulusan = () => {
                     <thead>
                         <tr>
                             <th>No</th>
-                            <th>Jumlah Mahasiswa</th>
                             <th>Periode Wisuda</th>
+                            <th>Jumlah Mahasiswa</th>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>

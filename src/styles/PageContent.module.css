@@ -412,3 +412,6 @@ td:last-child .iconlink:hover {
     background-color: #fbfdff;
 }
 
+.mhsNameTable {
+    text-transform: capitalize;
+}
