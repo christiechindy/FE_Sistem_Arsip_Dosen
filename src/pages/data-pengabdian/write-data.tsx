@@ -249,7 +249,8 @@ const TambahPengabdian = () => {
         }
         else { // in ADD mode
             try { 
-                formData.append("file_pengabdian", fileToScan as any);
+                formData.append("file_pengabdian", fileToScan as any);  
+                
                 toast("Please wait");
                 const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/pengabdian/addPengabdian`, formData, auth);
                 if (res.data.status !== "OK") {
