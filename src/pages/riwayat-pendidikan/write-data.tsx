@@ -148,10 +148,6 @@ const WriteData = () => {
     // state for the explanation tooltip for file
     const [explVis, setExplVis] = useState<boolean>(false);
 
-    useEffect(() => {
-        console.log("sarjana berubah jadi", sarjana);
-    }, [sarjana])
-
     return (
         <Layout>
             <div className={styles.page}>

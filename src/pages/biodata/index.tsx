@@ -21,18 +21,18 @@ const Biodata = () => {
     const [email, setEmail] = useState<string>("");
     const [pangkat, setPangkat] = useState<string>("");
 
-    useEffect(() => {
-        const getBiodata = async () => {
-            setLoading(true);
-            const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/dosen/getDosenByNIP/${nip}`, auth);
-            const res:TRespBiodata = ax.data;
-            const data = res.data;
-            setNama(data?.nama);
-            setEmail(data?.email || "");
-            setPangkat(data?.pangkat || "");
-            setLoading(false);
-        }
+    const getBiodata = async () => {
+        setLoading(true);
+        const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/dosen/getDosenByNIP/${nip}`, auth);
+        const res:TRespBiodata = ax.data;
+        const data = res.data;
+        setNama(data?.nama);
+        setEmail(data?.email || "");
+        setPangkat(data?.pangkat || "");
+        setLoading(false);
+    }
 
+    useEffect(() => {
         getBiodata();
     }, [])
 
@@ -48,13 +48,15 @@ const Biodata = () => {
             const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/dosen/updateDosenByNIP/${nip}`, formData, auth);
             if (res.data.status !== "OK") {
                 toast.error(res.data.status +" "+ JSON.stringify(res.data.message))
+                getBiodata();
             } else {
-                router.back();
+                toast.success("Biodata berhasil disimpan");
             }
         } catch (err) {
             const error = err as TError;
             if (error.response.data.status !== "OK") {
                 toast.error(error.response.data.status +" "+ JSON.stringify(error.response.data.message))
+                getBiodata();
             }
         }
     }
