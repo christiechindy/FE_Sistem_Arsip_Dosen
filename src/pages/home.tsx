@@ -1,7 +1,5 @@
 import Head from 'next/head'
-import Image from 'next/image'
 import { Inter } from '@next/font/google'
-import { Sidebar } from '@/components/Sidebar'
 import styles from "../styles/PageContent.module.css"
 import Layout from '@/components/Layout'
 import { useContext, useEffect, useState } from 'react'

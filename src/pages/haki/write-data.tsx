@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout"
 import styles from "../../styles/PageContent.module.css"
-import { useState, MouseEvent, ChangeEvent, useEffect, useContext } from "react"
+import { useState, MouseEvent, useEffect, useContext } from "react"
 import axios from "axios";
 import { useRouter } from "next/router";
 import { TDataHAKI, TResp1HAKI } from "./Types";

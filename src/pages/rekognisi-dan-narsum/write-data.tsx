@@ -1,10 +1,9 @@
 import { useRouter } from "next/router"
-import { ChangeEvent, MouseEvent, useContext, useEffect, useState } from "react";
+import { MouseEvent, useContext, useEffect, useState } from "react";
 import { TDataRekogNarsum, TResp1RekogNarsum } from "./Types";
 import axios from "axios";
 import styles from "../../styles/PageContent.module.css"
 import Layout from "@/components/Layout";
-import Select from "react-select";
 import { UserContext } from "@/context/UserContext";
 import { InputDropDownField, InputDropDownTunggal, InputFileField, InputTextField, InputYearField, UneditableTextField } from "@/components/InputField";
 import { TDropDown, TError, TRespDosen } from "../CommonTypes";

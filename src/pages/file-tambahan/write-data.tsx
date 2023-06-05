@@ -1,12 +1,12 @@
 import Layout from "@/components/Layout"
 import styles from "../../styles/PageContent.module.css"
-import { useState, MouseEvent, ChangeEvent, useEffect, useContext } from "react"
+import { useState, MouseEvent, useEffect, useContext } from "react"
 import axios from "axios";
 import { useRouter } from "next/router";
 import { TDataTambahan, TResp1DataTambahan } from "./Types";
 import { UserContext } from "@/context/UserContext";
-import { InputDropDownTunggal, InputFileField, InputTextField, InputYearField, UneditableTextField } from "@/components/InputField";
-import { TDropDown, TError, TRespDosen } from "../CommonTypes";
+import { InputFileField, InputTextField, InputYearField } from "@/components/InputField";
+import { TError } from "../CommonTypes";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

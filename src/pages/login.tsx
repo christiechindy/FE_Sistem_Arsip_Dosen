@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import styles from "../styles/Login.module.css";
-import Link from 'next/link';
 
 const index = () => {
     const loginHandler = () => {

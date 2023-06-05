@@ -5,8 +5,8 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { TDataLomba, TDokumentasi, TResp1DataLomba } from "./Types";
 import { UserContext } from "@/context/UserContext";
-import { InputDateRangeField, InputDropDownMahasiswaTunggal, InputDropDownTunggal, InputFileField, InputTextField, UneditableTextField } from "@/components/InputField";
-import { TDropDown, TError, TMhsPy, TRespDosen } from "../CommonTypes";
+import { InputDateRangeField, InputDropDownMahasiswaTunggal, InputFileField, InputTextField, UneditableTextField } from "@/components/InputField";
+import { TDropDown, TError, TMhsPy } from "../CommonTypes";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -225,7 +225,7 @@ const WriteData = () => {
                         </>
                         :
                         <>
-                            <InputFileField label="File" setValue={setCertif} />
+                            <InputFileField label="Sertifikat Lomba (PDF)" setValue={setCertif} />
 
                             <div className={styles.field}>
                                 <label>Gambar Dokumentasi Lomba</label>

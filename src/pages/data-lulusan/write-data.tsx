@@ -5,7 +5,7 @@ import axios from "axios";
 import { useRouter } from "next/router";
 import { TDataLulusan, TResp1DataLulusan } from "./Types";
 import { UserContext } from "@/context/UserContext";
-import { InputDropDownTunggal, InputFileField, InputNumberField, InputTextField, InputYearField, UneditableTextField } from "@/components/InputField";
+import { InputNumberField, InputTextField } from "@/components/InputField";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { TError } from "../CommonTypes";

@@ -3,7 +3,7 @@
 import Layout from "@/components/Layout"
 import styles from "../../styles/PageContent.module.css"
 import { useRouter } from 'next/router';
-import { ChangeEvent, MouseEvent, useContext } from "react";
+import { MouseEvent, useContext } from "react";
 import {useState, useEffect} from 'react';
 import axios from "axios";
 import { TDataBKD, TResp1BKD } from "./Types";

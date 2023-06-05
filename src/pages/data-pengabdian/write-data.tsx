@@ -4,7 +4,7 @@ import { useState, MouseEvent, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
 import { TDataOCRScan, TDataPengabdian, TResp1Pengabdian } from './Types';
 import { TDropDown, TError, TMhsPy, TRespDosen } from "../CommonTypes";
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { auth, getToken } from "@/utils/token";
 import { FileContext } from "@/context/FileContext";
 import { InputDropDownDosen, InputDropDownTunggal, InputDropDownMahasiswa, InputTextField, InputYearField } from "@/components/InputField";
