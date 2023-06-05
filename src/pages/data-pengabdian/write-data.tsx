@@ -51,7 +51,6 @@ const TambahPengabdian = () => {
         data[idx].value = nip;
         data[idx].label = nama_dosen;
         setDosenFields(data);
-        console.log(dosenFields);
     }
 
     const addDosenField = () => {
@@ -74,7 +73,6 @@ const TambahPengabdian = () => {
         const getAllMhs = async () => {
             const formData = new FormData();
             formData.append("typed", inputValue);
-            console.log("api to search for name typed");
             const res = await axios.post("http://localhost:133/search-mahasiswa", formData);
             const data:TMhsPy[] = res.data;
             let mhsDD = [];
@@ -120,15 +118,11 @@ const TambahPengabdian = () => {
 
     useEffect(() => {
         const getOCRData = async () => {
-            console.log("getOCRData is called")
-
             setLoading(true);
             const formData = new FormData();
             formData.append("filee", fileToScan);
             const ax = await axios.post(`${process.env.NEXT_PUBLIC_PYTHON}/scan-pdf`, formData);
-            console.log("ax", ax);
             const data:TDataOCRScan = ax.data;
-            console.log("data ocr dari api", data);
             setJudul(data?.judul);
             setTahun(data?.tahun);
             setKetuaNip(data?.ketua.nip);
@@ -156,7 +150,6 @@ const TambahPengabdian = () => {
             setLoading(true);
             const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/pengabdian/getPengabdianById/${id}`, auth);
             const res:TResp1Pengabdian = ax.data;
-            console.log("------", res);
             const data:TDataPengabdian = res.data;
             setJudul(data?.judul_pengabdian);
             setTahun(data?.tahun_pengabdian.toString());

@@ -56,7 +56,6 @@ const DataPenelitian = () => {
             }).then((res) => setDataPenelitian(dataPenelitian?.filter(d => d.id !== id)))
 
             count!==undefined ? setCount(count-1) : "";
-            console.log("count", count);
         } catch (err) {
             console.log(err);
         }

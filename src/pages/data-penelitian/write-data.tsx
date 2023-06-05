@@ -51,7 +51,6 @@ const TambahPenelitian = () => {
         data[idx].value = nip;
         data[idx].label = nama_dosen;
         setDosenFields(data);
-        console.log(dosenFields);
     }
 
     const addDosenField = () => {
@@ -74,8 +73,6 @@ const TambahPenelitian = () => {
         const getAllMhs = async () => {
             const formData = new FormData();
             formData.append("typed", inputValue);
-            console.log("api to search for name typed");
-            console.log("envvvvvvvvvvvvvvvvvvvvvv", process.env.NEXT_PUBLIC_PYTHON);
             const res = await axios.post(`${process.env.NEXT_PUBLIC_PYTHON}/search-mahasiswa`, formData);
             const data:TMhsPy[] = res.data;
             let mhsDD = [];
@@ -121,15 +118,11 @@ const TambahPenelitian = () => {
 
     useEffect(() => {
         const getOCRData = async () => {
-            console.log("getOCRData is called")
-
             setLoading(true);
             const formData = new FormData();
             formData.append("filee", fileToScan);
             const ax = await axios.post(`${process.env.NEXT_PUBLIC_PYTHON}/scan-pdf`, formData);
-            console.log("ax", ax);
             const data:TDataOCRScan = ax.data;
-            console.log("data ocr dari api", data);
             setJudul(data?.judul);
             setTahun(data?.tahun);
             setKetuaNip(data?.ketua.nip);
@@ -157,7 +150,6 @@ const TambahPenelitian = () => {
             setLoading(true);
             const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/penelitian/getPenelitianById/${id}`, auth);
             const res:TResp1Penelitian = ax.data;
-            console.log("------", res);
             const data:TDataPenelitian = res.data;
             setJudul(data?.judul_penelitian);
             setTahun(data?.tahun_penelitian.toString());
@@ -222,7 +214,6 @@ const TambahPenelitian = () => {
             let key = `dosen_nip[${i}]`;
             formData.append(key, dosenFields[i].value);
         }
-        console.log("`````````````mhs fields`````````````", mhsFields);
         for (let i = 0; i < mhsFields.length; i++) {
             let key = `mahasiswa_nim[${i}]`;
             formData.append(key, mhsFields[i].value);

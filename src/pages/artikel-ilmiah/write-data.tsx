@@ -45,7 +45,6 @@ const WriteData = () => {
         }
 
         const displayPDF = async (id: string | string[] | undefined) => {
-            console.log("dipanggil ji displayPDF")
             axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/artikel_ilmiah/getFileArtikelIlmiahById/${id}`, {
                 headers: auth.headers,
                 responseType: 'blob'
@@ -122,7 +121,6 @@ const WriteData = () => {
                 
                 toast("Please wait");
                 const res = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/artikel_ilmiah/addArtikelIlmiah`, formData, auth);
-                console.log(res);
                 if (res.data.status !== "OK") {
                     toast.error(res.data.status +" "+ JSON.stringify(res.data.message))
                 } else {

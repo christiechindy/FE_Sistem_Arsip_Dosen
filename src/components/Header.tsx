@@ -51,7 +51,7 @@ export const Header = () => {
                 Pengarsipan Dokumen Kerja Dosen
             </div>
             <div className={styles.account} onClick={dropClick}>
-                <div className={styles.name} onClick={() => console.log("object")}>{profileName}</div>
+                <div className={styles.name}>{profileName}</div>
                 <div className={styles.avatar}><Profile/></div>
                 <div className={styles.v}><DownTriangle/></div>
             </div>

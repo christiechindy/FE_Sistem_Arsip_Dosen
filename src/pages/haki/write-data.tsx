@@ -43,7 +43,6 @@ const WriteData = () => {
         }
 
         const displayPDF = async (id: string | string[] | undefined) => {
-            console.log("dipanggil ji displayPDF")
             axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/haki/getFileHakiById/${id}`, {
                 headers: auth.headers,
                 responseType: 'blob'

@@ -13,7 +13,6 @@ const index = () => {
     useEffect(() => {
         const windowhref = window.location.href
         const code = windowhref.split("code=")[1]
-        console.log(code)
 
         const SignIn = async (code: string) => {
             await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/login`, {code})
@@ -21,7 +20,6 @@ const index = () => {
             .then((data:TTokenData) => {
                 setCookie("access_token", data.access_token)
                 setAccessToken(data.access_token);
-                console.log("success login");
             })
         }
 

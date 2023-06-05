@@ -59,7 +59,6 @@ const RekognisiNarsum = () => {
             .then((res) => setDataRekogNarsum(dataRekogNarsum?.filter(d => d.id !== id)))
 
             count!==undefined ? setCount(count-1) : "";
-            console.log("count", count);
         } catch (err) {
             console.log(err);
         }

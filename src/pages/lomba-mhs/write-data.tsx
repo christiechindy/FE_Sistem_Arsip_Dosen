@@ -51,7 +51,6 @@ const WriteData = () => {
         }
 
         const displayPDF = async (id: string | string[] | undefined) => {
-            console.log("dipanggil ji displayPDF")
             axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/lomba/getFileLombaById/${id}`, {
                 headers: auth.headers,
                 responseType: 'blob'
@@ -84,8 +83,6 @@ const WriteData = () => {
         const getAllMhs = async () => {
             const formData = new FormData();
             formData.append("typed", inputValue);
-            console.log("api to search for name typed");
-            console.log("envvvvvvvvvvvvvvvvvvvvvv", process.env.NEXT_PUBLIC_PYTHON);
             const res = await axios.post(`${process.env.NEXT_PUBLIC_PYTHON}/search-mahasiswa`, formData);
             const data:TMhsPy[] = res.data;
             let mhsDD = [];

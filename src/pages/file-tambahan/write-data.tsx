@@ -45,7 +45,6 @@ const WriteData = () => {
         }
 
         const displayPDF = async (id: string | string[] | undefined) => {
-            console.log("dipanggil ji displayPDF")
             axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/admin/file_tambahan/getFileFileTambahanById/${id}`, {
                 headers: auth.headers,
                 responseType: 'blob'
