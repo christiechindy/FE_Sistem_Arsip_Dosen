@@ -3,6 +3,8 @@
     width: 100%;
     min-height: calc(100vh - 60px);
     padding: 30px;
+
+    overflow: auto;
 }
 
 .top {
@@ -415,3 +417,42 @@ td:last-child .iconlink:hover {
 .mhsNameTable {
     text-transform: capitalize;
 }
+
+/*-------------------Gambar2 Dokumentasi Lomba----------------------*/
+.gbrLombaContainer {
+    height: 300px;
+    overflow-x: scroll;
+    overflow-y: hidden;
+    white-space: nowrap;
+    box-sizing: border-box;
+
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.gbrLomba {
+    height: 90%;
+    object-fit: cover;
+    border-radius: 10px;
+    margin-right: 24px;
+    box-shadow: 0px 0px 7px 1px rgba(176, 176, 176, 0.45);
+}
+
+/* .field:has(.gbrLombaContainer) {
+    max-width: 50%;
+}
+
+.gbrLombaContainer {
+    box-sizing: border-box;
+    height: 300px;
+    overflow: auto;
+    white-space: nowrap;
+}
+
+.gbrLomba {
+    height: 90%;
+    object-fit: cover;
+    display: inline-block;
+} */

@@ -1,5 +1,5 @@
-// params format : 2222-12
 export const changeDateFormat = (date: string) => {
+    // params format : 2222-12 or 2222-12-31
     const datee = date.split("-");
     const y = parseInt(datee[0]);
     const m = parseInt(datee[1]);
@@ -45,5 +45,11 @@ export const changeDateFormat = (date: string) => {
             break;
     }
 
-    return (month + " " + y)
+    let d;
+    if (datee.length > 2) {
+        d = parseInt(datee[2]);
+        return (d + " " + month + " " + y)
+    } else {
+        return (month + " " + y)
+    }
 }

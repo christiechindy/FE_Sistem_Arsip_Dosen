@@ -59,7 +59,6 @@ export default function Home() {
             document.body.appendChild(link);
             link.click();
             link.remove();
-            // window.open(url);
         })
         .catch(err => console.log(err))
     }

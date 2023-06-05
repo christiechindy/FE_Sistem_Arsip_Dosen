@@ -1,7 +1,7 @@
 import Link from "next/link";
 import styles from "../styles/Sidebar.module.css";
 import { useRouter } from "next/router";
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext } from 'react'
 import { UserContext } from "@/context/UserContext";
 
 interface ILink {
@@ -44,7 +44,7 @@ const menu:ILink[] = [
     },
     {
         href: "/riwayat-pendidikan",
-        text: "Riwayat Pendidikan"
+        text: "Riwayat Pendidikan Dosen"
     }
 ]
 
@@ -56,6 +56,10 @@ const menuKhususDosen: ILink[] = [
 ]
 
 const menuKhususAdmin:ILink[] = [
+    {
+        href: "/lomba-mhs",
+        text: "Data Lomba Mahasiswa"
+    },
     {
         href: "/data-lulusan",
         text: "Data Lulusan"
@@ -80,6 +84,7 @@ export const Sidebar = () => {
                 {menu.map((link: ILink, index: number) => (
                     <Link href={link.href} className={router.pathname.startsWith(link.href) ? styles.active : ""} key={index}>{link.text}</Link>
                 ))}
+                <div className={styles.line}></div>
                 {role === 2 ?
                     menuKhususDosen.map((link: ILink, index: number) => (
                         <Link href={link.href} className={router.pathname.startsWith(link.href) ? styles.active : ""} key={index}>{link.text}</Link>

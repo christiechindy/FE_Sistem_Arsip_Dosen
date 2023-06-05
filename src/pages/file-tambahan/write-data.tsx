@@ -11,7 +11,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 const WriteData = () => {
-    const {accessToken, nip, role} = useContext(UserContext);
+    const {accessToken, role} = useContext(UserContext);
     const auth = {
         headers: { Authorization: `Bearer ${accessToken}` }
     };

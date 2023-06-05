@@ -58,7 +58,10 @@ export const UneditableTextField = ({loading, label, value}: IPropsUneditableTF)
     return (
         <div className={styles.field}>
             <label>{label}</label>
-            <input className={loading ? styles.loadingInput : ""} type="text" value={value} style={{cursor: "not-allowed"}} disabled/>
+            <input className={loading ? styles.loadingInput : ""} type="text" value={value} style={{
+                cursor: "not-allowed",
+                textTransform: "capitalize"
+            }} disabled />
         </div>
     )
 }
@@ -85,7 +88,7 @@ export const InputMonthYearField = ({loading, label, value, setValue}: IPropsInp
     )
 }
 
-interface IPropsInputYearRange {
+interface IPropsInputDateRange {
     loading: boolean,
     label: string,
     start: string,
@@ -94,7 +97,7 @@ interface IPropsInputYearRange {
     setEnd: Dispatch<SetStateAction<string>>,
 }
 
-export const InputYearRangeField = ({loading, label, start, setStart, end, setEnd}: IPropsInputYearRange) => {
+export const InputYearRangeField = ({loading, label, start, setStart, end, setEnd}: IPropsInputDateRange) => {
     return (
         <div className={styles.field}>
             <label>{label}</label>
@@ -109,6 +112,17 @@ export const InputYearRangeField = ({loading, label, start, setStart, end, setEn
                     setEnd(e.target.value)
                 }
             }} onFocus={() => setEnd((Number(start)+1).toString())} />
+        </div>
+    );
+}
+
+export const InputDateRangeField = ({loading, label, start, setStart, end, setEnd}: IPropsInputDateRange) => {
+    return (
+        <div className={styles.field}>
+            <label>{label}</label>
+            <input style={{width: "180px"}} className={loading ? styles.loadingInput : ""} type="date" value={start} name="startY" onChange={(e: ChangeEvent<HTMLInputElement>) => {setStart(e.target.value)}} />
+            {" - "}
+            <input style={{width: "180px"}} className={loading ? styles.loadingInput : ""} type="date" value={end} name="endY" onChange={(e: ChangeEvent<HTMLInputElement>) => {setEnd(e.target.value)}} />
         </div>
     );
 }
@@ -187,6 +201,49 @@ export const InputDropDownMahasiswa = ({loading, mhsFields, mhsData, handleMhsCh
                     <div className={styles.delPerson} onClick={() => delMhsField(input.value)}><XDel /></div>
                 </div>
             ))}
+        </div>
+    );
+}
+
+interface IPropsInputDDMahasiswaTunggal {
+    loading: boolean,
+    mhsData: IOption[],
+    handleInputChange(inputValue: string): void,
+    nim: string,
+    setNim: Dispatch<SetStateAction<string>>,
+    setName: Dispatch<SetStateAction<string>>
+}
+
+export const InputDropDownMahasiswaTunggal = ({loading, mhsData, handleInputChange, nim, setNim, setName}: IPropsInputDDMahasiswaTunggal) => {
+    return (
+        <div className={styles.field}>
+            <label>Mahasiswa yang Terlibat</label>
+            {loading ? 
+                <input type="text" className={styles.loadingInput} style={{marginBottom: "7px"}} /> 
+                : 
+                <div className={styles.inputtanPerOrg}>
+                    <Select 
+                        options={mhsData}
+                        value={{value: nim, label: mhsData.find(d => d.value === nim)?.label}}
+                        styles={{
+                            control: (baseStyles, state) => ({
+                                ...baseStyles,
+                                border: state.isFocused ? "1.5px solid #0085FF" : "1.5px solid #dadada",
+                                borderRadius: "10px",
+                                outline: state.isFocused ? "none" : "",
+                                fontSize: "14px",
+                                paddingLeft: "8px",
+                                fontWeight: "400",
+                            }),
+                        }}
+                        onChange={(opt) => {
+                            setNim(opt!.value);
+                            setName(opt!.label);
+                        }}
+                        onInputChange={handleInputChange}
+                    />
+                </div>
+            }
         </div>
     );
 }

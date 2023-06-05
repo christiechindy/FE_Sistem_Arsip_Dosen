@@ -63,7 +63,6 @@ body {
 
 .content {
     display: flex;
-    gap: 27px;
 }
 
 button, .add_btn {
