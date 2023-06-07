@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import styles from "../../styles/PageContent.module.css";
 import Link from 'next/link';
 import { useContext, useEffect, useState } from "react";
-import { TDataArtIlmiah, TRespArtIlmiah } from "./Types";
+import { TDataArtIlmiah, TRespArtIlmiah } from "../../Types/TArtIlmiah";
 import axios from "axios";
 import FileIcon from '@/assets/FileIcon';
 import PencilIcon from "@/assets/PencilIcon";

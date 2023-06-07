@@ -6,7 +6,7 @@ import PencilIcon from '../../assets/PencilIcon';
 import DeleteIcon from "@/assets/DeleteIcon";
 import React, { useState, useEffect, useContext } from 'react';
 import Modal from "@/components/DeleteModal";
-import { TRespPenelitian, TDataPenelitian } from './Types';
+import { TRespPenelitian, TDataPenelitian } from '../../Types/TPenelitian';
 import UpFileModal from "@/components/UpFileModal";
 import Loading from "@/components/Loading";
 import axios from 'axios';

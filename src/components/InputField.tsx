@@ -238,7 +238,7 @@ export const InputDropDownMahasiswaTunggal = ({loading, mhsData, handleInputChan
                         }}
                         onChange={(opt) => {
                             setNim(opt!.value);
-                            setName(opt!.label);
+                            setName(opt!.label!);
                         }}
                         onInputChange={handleInputChange}
                     />

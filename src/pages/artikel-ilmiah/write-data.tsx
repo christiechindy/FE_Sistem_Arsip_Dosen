@@ -3,10 +3,10 @@ import styles from "../../styles/PageContent.module.css"
 import { useState, MouseEvent, ChangeEvent, useEffect, useContext } from "react"
 import axios from "axios";
 import { useRouter } from "next/router";
-import { TDataArtIlmiah, TResp1ArtIlmiah } from "./Types";
+import { TDataArtIlmiah, TResp1ArtIlmiah } from "../../Types/TArtIlmiah";
 import { UserContext } from "@/context/UserContext";
 import { InputDropDownTunggal, InputFileField, InputTextField, InputYearField, UneditableTextField } from "@/components/InputField";
-import { TDropDown, TError, TRespDosen } from "../CommonTypes";
+import { TDropDown, TError, TRespDosen } from "../../Types/CommonTypes";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

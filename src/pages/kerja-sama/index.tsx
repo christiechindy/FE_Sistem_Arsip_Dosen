@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import styles from "../../styles/PageContent.module.css";
 import Link from 'next/link';
 import { useContext, useEffect, useState } from "react";
-import { TDataKerjaSama, TRespKerjaSama } from "./Types";
+import { TDataKerjaSama, TRespKerjaSama } from "../../Types/TKerjaSama";
 import axios from "axios";
 import FileIcon from '@/assets/FileIcon';
 import PencilIcon from "@/assets/PencilIcon";

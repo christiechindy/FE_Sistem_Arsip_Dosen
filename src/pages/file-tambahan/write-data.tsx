@@ -3,10 +3,10 @@ import styles from "../../styles/PageContent.module.css"
 import { useState, MouseEvent, useEffect, useContext } from "react"
 import axios from "axios";
 import { useRouter } from "next/router";
-import { TDataTambahan, TResp1DataTambahan } from "./Types";
+import { TDataTambahan, TResp1DataTambahan } from "../../Types/TTambahan";
 import { UserContext } from "@/context/UserContext";
 import { InputFileField, InputTextField, InputYearField } from "@/components/InputField";
-import { TError } from "../CommonTypes";
+import { TError } from "../../Types/CommonTypes";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

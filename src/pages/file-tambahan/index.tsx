@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import styles from "../../styles/PageContent.module.css";
 import Link from 'next/link';
 import { useContext, useEffect, useState } from "react";
-import { TDataTambahan, TRespDataTambahan } from "./Types";
+import { TDataTambahan, TRespDataTambahan } from "../../Types/TTambahan";
 import axios from "axios";
 import FileIcon from '@/assets/FileIcon';
 import PencilIcon from "@/assets/PencilIcon";

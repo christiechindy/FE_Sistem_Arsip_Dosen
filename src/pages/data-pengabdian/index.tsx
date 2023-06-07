@@ -6,7 +6,7 @@ import PencilIcon from '../../assets/PencilIcon';
 import DeleteIcon from "@/assets/DeleteIcon";
 import React, { useState, useEffect, useContext } from 'react';
 import Modal from "@/components/DeleteModal";
-import { TRespPengabdian, TDataPengabdian } from './Types';
+import { TRespPengabdian, TDataPengabdian } from '../../Types/TPengabdian';
 import UpFileModal from "@/components/UpFileModal";
 import Loading from "@/components/Loading";
 import axios from 'axios';

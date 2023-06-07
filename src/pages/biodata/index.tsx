@@ -4,11 +4,11 @@ import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/context/UserContext";
 import { InputTextField, UneditableTextField } from "@/components/InputField";
 import axios from "axios";
-import { TRespBiodata } from "./Types";
+import { TRespBiodata } from "../../Types/TBio";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useRouter } from "next/router";
-import { TError } from "../CommonTypes";
+import { TError } from "../../Types/CommonTypes";
 
 const Biodata = () => {
     const {nip, accessToken} = useContext(UserContext);

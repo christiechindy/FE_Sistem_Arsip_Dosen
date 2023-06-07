@@ -3,10 +3,10 @@ import styles from "../../styles/PageContent.module.css"
 import { useState, MouseEvent, useEffect, useContext, ChangeEvent } from "react"
 import axios from "axios";
 import { useRouter } from "next/router";
-import { TDataLomba, TDokumentasi, TResp1DataLomba } from "./Types";
+import { TDataLomba, TDokumentasi, TResp1DataLomba } from "../../Types/TLombaMhs";
 import { UserContext } from "@/context/UserContext";
 import { InputDateRangeField, InputDropDownMahasiswaTunggal, InputFileField, InputTextField, UneditableTextField } from "@/components/InputField";
-import { TDropDown, TError, TMhsPy } from "../CommonTypes";
+import { TDropDown, TError, TMhsPy } from "../../Types/CommonTypes";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

@@ -1,12 +1,12 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState, MouseEvent, useContext } from "react";
-import { TDataSertif, TResp1Sertif } from "./Types";
+import { TDataSertif, TResp1Sertif } from "../../Types/TSertif";
 import Layout from "@/components/Layout";
 import styles from "../../styles/PageContent.module.css"
 import { UserContext } from "@/context/UserContext";
 import { InputDropDownField, InputDropDownTunggal, InputFileField, InputTextField, InputYearField, UneditableTextField } from "@/components/InputField";
-import { TDropDown, TError, TRespDosen } from "../CommonTypes";
+import { TDropDown, TError, TRespDosen } from "../../Types/CommonTypes";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

@@ -6,10 +6,10 @@ import { useRouter } from 'next/router';
 import { MouseEvent, useContext } from "react";
 import {useState, useEffect} from 'react';
 import axios from "axios";
-import { TDataBKD, TResp1BKD } from "./Types";
+import { TDataBKD, TResp1BKD } from "../../Types/TBKD";
 import { UserContext } from "@/context/UserContext";
 import { InputDropDownField, InputDropDownTunggal, InputFileField, InputTextField, InputYearRangeField, UneditableTextField } from "@/components/InputField";
-import { TDropDown, TError, TRespDosen } from "../CommonTypes";
+import { TDropDown, TError, TRespDosen } from "../../Types/CommonTypes";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 

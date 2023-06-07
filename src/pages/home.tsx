@@ -5,7 +5,7 @@ import Layout from '@/components/Layout'
 import { useContext, useEffect, useState } from 'react'
 import { UserContext } from '@/context/UserContext'
 import { InputDropDownTunggal } from '@/components/InputField'
-import { TDropDown, TRespDosen } from './CommonTypes'
+import { TDropDown, TRespDosen } from '../Types/CommonTypes'
 import axios from 'axios'
 import { auth, getToken } from '@/utils/token'
 

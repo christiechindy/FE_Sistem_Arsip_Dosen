@@ -2,7 +2,7 @@
 
 import Layout from "@/components/Layout";
 import styles from "../../styles/PageContent.module.css";
-import { TDataBKD, TRespBKD } from './Types';
+import { TDataBKD, TRespBKD } from '../../Types/TBKD';
 import FileIcon from '@/assets/FileIcon';
 import Link from "next/link";
 import PencilIcon from '../../assets/PencilIcon';

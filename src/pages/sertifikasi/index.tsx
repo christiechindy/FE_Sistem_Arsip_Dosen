@@ -3,7 +3,7 @@ import Loading from "@/components/Loading";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import styles from "../../styles/PageContent.module.css";
-import { TDataSertif, TRespSertif } from './Types';
+import { TDataSertif, TRespSertif } from '../../Types/TSertif';
 import axios from "axios";
 import { fileOpenHandler } from "@/utils/pdfOpen";
 import FileIcon from "@/assets/FileIcon";

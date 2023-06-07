@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import styles from "../../styles/PageContent.module.css";
 import Link from 'next/link';
 import { useContext, useEffect, useState } from "react";
-import { TDataLulusan, TRespDataLulusan } from "./Types";
+import { TDataLulusan, TRespDataLulusan } from "../../Types/TLulusan";
 import axios from "axios";
 import PencilIcon from "@/assets/PencilIcon";
 import DeleteIcon from "@/assets/DeleteIcon";

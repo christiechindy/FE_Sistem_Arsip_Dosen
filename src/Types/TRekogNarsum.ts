@@ -1,4 +1,4 @@
-import { TDosen } from "../CommonTypes";
+import { TDosen } from "./CommonTypes";
 
 export type TDataRekogNarsum = {
     id: string;

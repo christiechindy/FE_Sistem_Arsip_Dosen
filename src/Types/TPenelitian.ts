@@ -1,27 +1,27 @@
-import { TDosen, TDosenPy, TMhsPy, TMhsTerlibat } from "../CommonTypes";
+import { TDosen, TDosenPy, TMhsPy, TMhsTerlibat } from "./CommonTypes";
 
-export type TDataPengabdian = {
+export type TDataPenelitian = {
     id: string;
-    judul_pengabdian: string;
-    tahun_pengabdian: number;
-    file_pengabdian: string;
+    judul_penelitian: string;
+    tahun_penelitian: number;
+    file_penelitian: string;
     dosen: TDosen[];
     mahasiswa: TMhsTerlibat[];
 }
 
-export type TRespPengabdian = {
+export type TRespPenelitian = {
     status: string;
     code: number;
     message: string;
     count: number;
-    data: TDataPengabdian[]
+    data: TDataPenelitian[]
 }
 
-export type TResp1Pengabdian = {
+export type TResp1Penelitian = {
     status: string;
     code: number;
     message: string;
-    data: TDataPengabdian;
+    data: TDataPenelitian;
 }
 
 export type TDataOCRScan = {

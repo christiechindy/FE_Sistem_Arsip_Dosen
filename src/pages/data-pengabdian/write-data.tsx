@@ -2,8 +2,8 @@ import Layout from "@/components/Layout"
 import styles from "../../styles/PageContent.module.css"
 import { useState, MouseEvent, useEffect, useContext } from "react";
 import { useRouter } from "next/router";
-import { TDataOCRScan, TDataPengabdian, TResp1Pengabdian } from './Types';
-import { TDropDown, TError, TMhsPy, TRespDosen } from "../CommonTypes";
+import { TDataOCRScan, TDataPengabdian, TResp1Pengabdian } from '../../Types/TPengabdian';
+import { TDropDown, TError, TMhsPy, TRespDosen } from "../../Types/CommonTypes";
 import axios from 'axios';
 import { auth, getToken } from "@/utils/token";
 import { FileContext } from "@/context/FileContext";

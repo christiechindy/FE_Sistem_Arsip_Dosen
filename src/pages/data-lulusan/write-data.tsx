@@ -3,12 +3,12 @@ import styles from "../../styles/PageContent.module.css"
 import { useState, MouseEvent, useEffect, useContext } from "react"
 import axios from "axios";
 import { useRouter } from "next/router";
-import { TDataLulusan, TResp1DataLulusan } from "./Types";
+import { TDataLulusan, TResp1DataLulusan } from "../../Types/TLulusan";
 import { UserContext } from "@/context/UserContext";
 import { InputNumberField, InputTextField } from "@/components/InputField";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { TError } from "../CommonTypes";
+import { TError } from "../../Types/CommonTypes";
 
 const WriteData = () => {
     const {accessToken, nip, role} = useContext(UserContext);

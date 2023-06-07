@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useEffect, useContext } from "react"
 import styles from "../../../styles/Loader.module.css"
-import { TTokenData } from "./Types"
+import { TTokenData } from "../../../Types/TAuthCallback"
 import { useRouter } from "next/router"
 import { setCookie } from "cookies-next"
 import { UserContext } from "@/context/UserContext"

@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import styles from "../../styles/PageContent.module.css";
 import Link from 'next/link';
 import { useContext, useEffect, useState } from "react";
-import { TDataLomba, TRespDataLomba } from "./Types";
+import { TDataLomba, TRespDataLomba } from "../../Types/TLombaMhs";
 import axios from "axios";
 import FileIcon from '@/assets/FileIcon';
 import PencilIcon from "@/assets/PencilIcon";
