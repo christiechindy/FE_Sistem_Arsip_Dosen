@@ -40,7 +40,7 @@ const WriteData = () => {
             const ax = await axios.get(`${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/lomba/getLombaById/${id}`, auth);
             const res:TResp1DataLomba = ax.data;
             const data:TDataLomba = res.data;
-            setWhose(data?.mahasiswa![0].first_name + " " + data?.mahasiswa![0].last_name);
+            setWhose(data?.mahasiswa![0].first_name + " " + ((data.mahasiswa![0].last_name ? data.mahasiswa![0].last_name : "")));
             setNamaLomba(data?.nama_lomba);
             setPenyelenggara(data?.penyelenggara);
             setStartLomba(data?.start_date);

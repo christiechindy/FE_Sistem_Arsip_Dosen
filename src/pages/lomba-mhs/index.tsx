@@ -104,11 +104,11 @@ const LombaMhs = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {(count!<1) ? <tr><td className={styles.noData} colSpan={7}>No data</td></tr> : ""}
+                        {(count!<1) ? <tr><td className={styles.noData} colSpan={8}>No data</td></tr> : ""}
                         {dataLomba?.map((data, idx) => (
                             <tr>
                                 <td>{idx+1}</td>
-                                <td style={{textTransform: "capitalize"}}>{data.mahasiswa![0].first_name + " " + data.mahasiswa![0].last_name}</td>
+                                <td style={{textTransform: "capitalize"}}>{data.mahasiswa![0].first_name + " " + (data.mahasiswa![0].last_name ? data.mahasiswa![0].last_name : "")}</td>
                                 <td>{data.nama_lomba}</td>
                                 <td>{data.penyelenggara}</td>
                                 <td>{changeDateFormat(data.start_date) + " - " + changeDateFormat(data.end_date)}</td>
